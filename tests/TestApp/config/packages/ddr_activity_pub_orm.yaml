@@ -1,0 +1,2 @@
+ddr_activity_pub_orm:
+    local_actor_class: Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalActor
