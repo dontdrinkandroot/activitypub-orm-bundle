@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Service;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\SignKey;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Actor\Actor;
+use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\JsonLdContext;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\PublicKey;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Serializer\TypeClassRegistry;
@@ -62,6 +63,7 @@ class LocalActorService implements LocalActorServiceInterface
     {
         Asserted::instanceOf($localActor, LocalActor::class);
         $actor = $this->typeClassRegistry->actorFromType($localActor->type);
+        $actor->jsonLdContext = new JsonLdContext(['https://w3id.org/security/v1']);
         $actor->id = $this->localActorUriGenerator->generateId($localActor->getUsername());
         $actor->inbox = $this->localActorUriGenerator->generateInbox($localActor->getUsername());
         $actor->preferredUsername = $localActor->getUsername();

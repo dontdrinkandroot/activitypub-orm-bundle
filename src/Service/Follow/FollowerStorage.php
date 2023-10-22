@@ -84,14 +84,19 @@ class FollowerStorage implements FollowerStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function list(LocalActorInterface $localActor, FollowState $followState = FollowState::ACCEPTED): array
+    public function list(
+        LocalActorInterface $localActor,
+        FollowState $followState = FollowState::ACCEPTED,
+        int $offset = 0,
+        int $limit = 50
+    ): array
     {
         $accepted = match($followState) {
             FollowState::ACCEPTED => true,
             FollowState::PENDING => false,
         };
 
-        $followers = $this->followerRepository->findByLocalActorAndAccepted($localActor, $accepted);
+        $followers = $this->followerRepository->findByLocalActorAndAccepted($localActor, $accepted, $offset, $limit);
 
         return array_map(
             fn(Follower $follower) => $follower->remoteActorId,
