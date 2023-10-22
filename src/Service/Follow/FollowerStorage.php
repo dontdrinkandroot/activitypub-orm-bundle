@@ -13,7 +13,7 @@ use RuntimeException;
 class FollowerStorage implements FollowerStorageInterface
 {
     public function __construct(
-        private readonly FollowerRepository $followerRepository
+        private readonly FollowerRepository $repository
     ) {
     }
 
@@ -22,7 +22,7 @@ class FollowerStorage implements FollowerStorageInterface
      */
     public function addRequest(LocalActorInterface $localActor, Uri $remoteActorId): void
     {
-        $follower = $this->followerRepository->findOneBy([
+        $follower = $this->repository->findOneBy([
             'localActor' => $localActor,
             'remoteActorId' => $remoteActorId
         ]);
@@ -31,7 +31,7 @@ class FollowerStorage implements FollowerStorageInterface
         }
 
         $follower = new Follower($localActor, $remoteActorId, false);
-        $this->followerRepository->create($follower);
+        $this->repository->create($follower);
     }
 
     /**
@@ -39,7 +39,7 @@ class FollowerStorage implements FollowerStorageInterface
      */
     public function acceptRequest(LocalActorInterface $localActor, Uri $remoteActorId): void
     {
-        $follower = $this->followerRepository->findOneBy([
+        $follower = $this->repository->findOneBy([
             'localActor' => $localActor,
             'remoteActorId' => $remoteActorId
         ]);
@@ -48,7 +48,7 @@ class FollowerStorage implements FollowerStorageInterface
         }
 
         $follower->accepted = true;
-        $this->followerRepository->update($follower);
+        $this->repository->update($follower);
     }
 
     /**
@@ -56,7 +56,7 @@ class FollowerStorage implements FollowerStorageInterface
      */
     public function rejectRequest(LocalActorInterface $localActor, Uri $remoteActorId): void
     {
-        $follower = $this->followerRepository->findOneBy([
+        $follower = $this->repository->findOneBy([
             'localActor' => $localActor,
             'remoteActorId' => $remoteActorId
         ]);
@@ -64,7 +64,7 @@ class FollowerStorage implements FollowerStorageInterface
             throw new RuntimeException('Follower not found');
         }
 
-        $this->followerRepository->delete($follower);
+        $this->repository->delete($follower);
     }
 
     /**
@@ -72,12 +72,12 @@ class FollowerStorage implements FollowerStorageInterface
      */
     public function remove(LocalActorInterface $localActor, Uri $remoteActorId): void
     {
-        $follower = $this->followerRepository->findOneBy([
+        $follower = $this->repository->findOneBy([
             'localActor' => $localActor,
             'remoteActorId' => $remoteActorId
         ]);
         if (null !== $follower) {
-            $this->followerRepository->delete($follower);
+            $this->repository->delete($follower);
         }
     }
 
@@ -96,7 +96,7 @@ class FollowerStorage implements FollowerStorageInterface
             FollowState::PENDING => false,
         };
 
-        $followers = $this->followerRepository->findByLocalActorAndAccepted($localActor, $accepted, $offset, $limit);
+        $followers = $this->repository->findByLocalActorAndAccepted($localActor, $accepted, $offset, $limit);
 
         return array_map(
             fn(Follower $follower) => $follower->remoteActorId,
@@ -107,10 +107,13 @@ class FollowerStorage implements FollowerStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function count(LocalActorInterface $localActor): int
+    public function count(LocalActorInterface $localActor, FollowState $followState = FollowState::ACCEPTED): int
     {
-        return $this->followerRepository->countByLocalActor($localActor);
+        $accepted = match ($followState) {
+            FollowState::ACCEPTED => true,
+            FollowState::PENDING => false,
+        };
+
+        return $this->repository->countByLocalActor($localActor, $accepted);
     }
-
-
 }

@@ -33,8 +33,8 @@ class FollowerRepository extends CrudServiceEntityRepository
         );
     }
 
-    public function countByLocalActor(LocalActorInterface $localActor): int
+    public function countByLocalActor(LocalActorInterface $localActor, bool $accepted = true): int
     {
-        return $this->count(['localActor' => $localActor, 'accepted' => true]);
+        return $this->count(['localActor' => $localActor, 'accepted' => $accepted]);
     }
 }
