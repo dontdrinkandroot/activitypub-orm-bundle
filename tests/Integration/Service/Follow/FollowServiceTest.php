@@ -26,18 +26,18 @@ class FollowServiceTest extends WebTestCase
         );
 
         $followerRepository = self::getService(FollowerRepository::class);
-        $follower = $followerRepository->findOneBy([
-            'localActor' => $localActorService,
-            'remoteActorId' => Uri::fromString('http://localhost/@person'),
-        ]);
+        $follower = $followerRepository->findOneByLocalActorAndRemoteActorUri(
+            $localActorService,
+            Uri::fromString('http://localhost/@person')
+        );
         self::assertNotNull($follower);
         self::assertFalse($follower->accepted);
 
         $followingRepository = self::getService(FollowingRepository::class);
-        $following = $followingRepository->findOneBy([
-            'localActor' => $localActorPerson,
-            'remoteActorId' => Uri::fromString('http://localhost/@service'),
-        ]);
+        $following = $followingRepository->findOneByLocalActorAndRemoteActorUri(
+            $localActorPerson,
+            Uri::fromString('http://localhost/@service'),
+        );
         self::assertNotNull($following);
         self::assertFalse($following->accepted);
 
@@ -46,16 +46,16 @@ class FollowServiceTest extends WebTestCase
             remoteActorId: Uri::fromString('http://localhost/@service')
         );
 
-        $follower = $followerRepository->findOneBy([
-            'localActor' => $localActorService,
-            'remoteActorId' => Uri::fromString('http://localhost/@person'),
-        ]);
+        $follower = $followerRepository->findOneByLocalActorAndRemoteActorUri(
+            $localActorService,
+            Uri::fromString('http://localhost/@person'),
+        );
         self::assertNull($follower);
 
-        $following = $followingRepository->findOneBy([
-            'localActor' => $localActorPerson,
-            'remoteActorId' => Uri::fromString('http://localhost/@service'),
-        ]);
+        $following = $followingRepository->findOneByLocalActorAndRemoteActorUri(
+            $localActorPerson,
+            Uri::fromString('http://localhost/@service'),
+        );
         self::assertNull($following);
     }
 }

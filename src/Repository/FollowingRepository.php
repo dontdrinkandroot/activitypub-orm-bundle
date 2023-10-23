@@ -6,13 +6,12 @@ use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Following;
 
 /**
- * @extends CrudServiceEntityRepository<Following>
+ * @extends AbstractFollowRepository<Following>
  */
-class FollowingRepository extends CrudServiceEntityRepository
+class FollowingRepository extends AbstractFollowRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Following::class);
     }
-
 }
