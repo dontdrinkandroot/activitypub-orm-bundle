@@ -60,7 +60,7 @@ class DatabaseActorResolver implements ActorResolverInterface
         return $this->findOrCreate($actorId)?->publicKey;
     }
 
-    private function findOrCreate(Uri $actorId): ?StoredActor
+    public function findOrCreate(Uri $actorId): ?StoredActor
     {
         // TODO: refetch if expired
         $dbActor = $this->actorRepository->findOneByUri($actorId);

@@ -7,7 +7,9 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowStorageInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\AbstractFollow;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\AbstractFollowRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Service\Actor\DatabaseActorResolver;
 use RuntimeException;
 
 /**
@@ -19,7 +21,8 @@ abstract class AbstractFollowStorage implements FollowStorageInterface
      * @param AbstractFollowRepository<T> $repository
      */
     public function __construct(
-        private readonly AbstractFollowRepository $repository
+        private readonly AbstractFollowRepository $repository,
+        private readonly DatabaseActorResolver $actorResolver
     ) {
     }
 
@@ -28,12 +31,14 @@ abstract class AbstractFollowStorage implements FollowStorageInterface
      */
     public function add(LocalActorInterface $localActor, Uri $remoteActorId): void
     {
-        $follow = $this->repository->findOneByLocalActorAndRemoteActorUri($localActor, $remoteActorId);
+        $remoteActor = $this->actorResolver->findOrCreate($remoteActorId)
+            ?? throw new RuntimeException('Remote Actor not found');
+        $follow = $this->repository->findOneByLocalActorAndRemotActor($localActor, $remoteActor);
         if (null !== $follow) {
             return;
         }
 
-        $follow = $this->createEntity($localActor, $remoteActorId);
+        $follow = $this->createEntity($localActor, $remoteActor);
         $this->repository->create($follow);
     }
 
@@ -42,7 +47,9 @@ abstract class AbstractFollowStorage implements FollowStorageInterface
      */
     public function accept(LocalActorInterface $localActor, Uri $remoteActorId): void
     {
-        $follow = $this->repository->findOneByLocalActorAndRemoteActorUri($localActor, $remoteActorId);
+        $remoteActor = $this->actorResolver->findOrCreate($remoteActorId)
+            ?? throw new RuntimeException('Remote Actor not found');
+        $follow = $this->repository->findOneByLocalActorAndRemotActor($localActor, $remoteActor);
         if (null === $follow) {
             throw new RuntimeException('Follow not found');
         }
@@ -56,7 +63,9 @@ abstract class AbstractFollowStorage implements FollowStorageInterface
      */
     public function reject(LocalActorInterface $localActor, Uri $remoteActorId): void
     {
-        $follow = $this->repository->findOneByLocalActorAndRemoteActorUri($localActor, $remoteActorId);
+        $remoteActor = $this->actorResolver->findOrCreate($remoteActorId)
+            ?? throw new RuntimeException('Remote Actor not found');
+        $follow = $this->repository->findOneByLocalActorAndRemotActor($localActor, $remoteActor);
         if (null === $follow) {
             throw new RuntimeException('Follow not found');
         }
@@ -69,7 +78,9 @@ abstract class AbstractFollowStorage implements FollowStorageInterface
      */
     public function remove(LocalActorInterface $localActor, Uri $remoteActorId): void
     {
-        $follow = $this->repository->findOneByLocalActorAndRemoteActorUri($localActor, $remoteActorId);
+        $remoteActor = $this->actorResolver->findOrCreate($remoteActorId)
+            ?? throw new RuntimeException('Remote Actor not found');
+        $follow = $this->repository->findOneByLocalActorAndRemotActor($localActor, $remoteActor);
         if (null !== $follow) {
             $this->repository->delete($follow);
         }
@@ -80,7 +91,9 @@ abstract class AbstractFollowStorage implements FollowStorageInterface
      */
     public function findState(LocalActorInterface $localActor, Uri $remoteActorId): ?FollowState
     {
-        $follow = $this->repository->findOneByLocalActorAndRemoteActorUri($localActor, $remoteActorId);
+        $remoteActor = $this->actorResolver->findOrCreate($remoteActorId)
+            ?? throw new RuntimeException('Remote Actor not found');
+        $follow = $this->repository->findOneByLocalActorAndRemotActor($localActor, $remoteActor);
         if (null === $follow) {
             return null;
         }
@@ -108,7 +121,7 @@ abstract class AbstractFollowStorage implements FollowStorageInterface
         $follows = $this->repository->findByLocalActorAndAccepted($localActor, $accepted, $offset, $limit);
 
         return array_map(
-            fn(AbstractFollow $follower) => $follower->remoteActorUri,
+            fn(AbstractFollow $follower) => $follower->remoteActor->getId(),
             $follows
         );
     }
@@ -129,5 +142,5 @@ abstract class AbstractFollowStorage implements FollowStorageInterface
     /**
      * @return T
      */
-    abstract protected function createEntity(LocalActorInterface $localActor, Uri $remoteActorId): AbstractFollow;
+    abstract protected function createEntity(LocalActorInterface $localActor, StoredActor $remoteActor): AbstractFollow;
 }

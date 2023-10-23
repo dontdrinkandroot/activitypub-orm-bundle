@@ -3,8 +3,8 @@
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Repository;
 
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
-use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\AbstractFollow;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
 
 /**
  * @template T of AbstractFollow
@@ -14,15 +14,15 @@ abstract class AbstractFollowRepository extends CrudServiceEntityRepository
     /**
      * @return T|null
      */
-    public function findOneByLocalActorAndRemoteActorUri(
+    public function findOneByLocalActorAndRemotActor(
         LocalActorInterface $localActor,
-        Uri $remoteActorUri
+        StoredActor $remoteActor
     ): ?AbstractFollow {
         $queryBuilder = $this->createQueryBuilder('follow')
             ->where('follow.localActor = :localActor')
-            ->andWhere('follow.remoteActorUri = :remoteActorUri')
+            ->andWhere('follow.remoteActor = :remoteActor')
             ->setParameter('localActor', $localActor)
-            ->setParameter('remoteActorUri', $remoteActorUri);
+            ->setParameter('remoteActor', $remoteActor);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }

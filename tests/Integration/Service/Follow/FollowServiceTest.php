@@ -2,10 +2,9 @@
 
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Tests\Integration\Service\Follow;
 
+use Dontdrinkandroot\ActivityPubCoreBundle\Model\FollowState;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowServiceInterface;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\FollowerRepository;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\FollowingRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalActor\Person;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalActor\Service;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalActor;
@@ -25,37 +24,33 @@ class FollowServiceTest extends WebTestCase
             remoteActorId: Uri::fromString('http://localhost/@service')
         );
 
-        $followerRepository = self::getService(FollowerRepository::class);
-        $follower = $followerRepository->findOneByLocalActorAndRemoteActorUri(
-            $localActorService,
-            Uri::fromString('http://localhost/@person')
+        $followState = $followService->findFollowerState(
+            localActor: $localActorService,
+            remoteActorId: Uri::fromString('http://localhost/@person')
         );
-        self::assertNotNull($follower);
-        self::assertFalse($follower->accepted);
+        self::assertEquals(FollowState::PENDING, $followState);
 
-        $followingRepository = self::getService(FollowingRepository::class);
-        $following = $followingRepository->findOneByLocalActorAndRemoteActorUri(
-            $localActorPerson,
-            Uri::fromString('http://localhost/@service'),
+        $followState = $followService->findFollowingState(
+            localActor: $localActorPerson,
+            remoteActorId: Uri::fromString('http://localhost/@service')
         );
-        self::assertNotNull($following);
-        self::assertFalse($following->accepted);
+        self::assertEquals(FollowState::PENDING, $followState);
 
         $followService->unfollow(
             localActor: $localActorPerson,
             remoteActorId: Uri::fromString('http://localhost/@service')
         );
 
-        $follower = $followerRepository->findOneByLocalActorAndRemoteActorUri(
-            $localActorService,
-            Uri::fromString('http://localhost/@person'),
+        $followState = $followService->findFollowerState(
+            localActor: $localActorService,
+            remoteActorId: Uri::fromString('http://localhost/@person')
         );
-        self::assertNull($follower);
+        self::assertNull($followState);
 
-        $following = $followingRepository->findOneByLocalActorAndRemoteActorUri(
-            $localActorPerson,
-            Uri::fromString('http://localhost/@service'),
+        $followState = $followService->findFollowingState(
+            localActor: $localActorPerson,
+            remoteActorId: Uri::fromString('http://localhost/@service')
         );
-        self::assertNull($following);
+        self::assertNull($followState);
     }
 }

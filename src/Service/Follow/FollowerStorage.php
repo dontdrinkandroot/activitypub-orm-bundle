@@ -3,11 +3,12 @@
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Service\Follow;
 
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
-use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowerStorageInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\AbstractFollow;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Follower;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\FollowerRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Service\Actor\DatabaseActorResolver;
 
 /**
  * @extends AbstractFollowStorage<Follower>
@@ -15,16 +16,17 @@ use Dontdrinkandroot\ActivityPubOrmBundle\Repository\FollowerRepository;
 class FollowerStorage extends AbstractFollowStorage implements FollowerStorageInterface
 {
     public function __construct(
-        FollowerRepository $repository
+        FollowerRepository $repository,
+        DatabaseActorResolver $actorResolver
     ) {
-        parent::__construct($repository);
+        parent::__construct($repository, $actorResolver);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function createEntity(LocalActorInterface $localActor, Uri $remoteActorId): AbstractFollow
+    protected function createEntity(LocalActorInterface $localActor, StoredActor $remoteActor): AbstractFollow
     {
-        return new Follower($localActor, $remoteActorId, false);
+        return new Follower($localActor, $remoteActor, false);
     }
 }
