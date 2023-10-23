@@ -10,7 +10,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Serializer\ActivityStreamEncoder;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\ActorResolverInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Client\ActivityPubClientInterface;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Actor as DbActor;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor as DbActor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\RawType;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ActorRepository;
 use Dontdrinkandroot\Common\Asserted;

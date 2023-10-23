@@ -9,17 +9,12 @@ use Dontdrinkandroot\ActivityPubOrmBundle\Doctrine\Dbal\Type\PlainJsonType;
 use Dontdrinkandroot\ActivityPubOrmBundle\Doctrine\Dbal\Type\UriType;
 
 #[ORM\Entity]
+#[ORM\Table(name: 'raw')]
 class RawType
 {
     use EntityTrait;
 
     public function __construct(
-        #[ORM\Column(type: UriType::NAME)]
-        public /* readonly */ Uri $uri,
-
-        #[ORM\Column(type: Types::STRING)]
-        public string $type,
-
         #[ORM\Column(type: PlainJsonType::NAME)]
         public string $content
     ) {
