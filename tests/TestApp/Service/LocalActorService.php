@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Service;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\SignKey;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Actor\Actor;
+use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Actor\ActorType;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\JsonLdContext;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\PublicKey;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
@@ -54,15 +55,18 @@ class LocalActorService implements LocalActorServiceInterface
         return new SignKey(
             id: $id->withFragment('main-key'),
             owner: $id,
-            privateKeyPem: $localActor->privateKeyPem,
-            publicKeyPem: $localActor->publicKeyPem,
+            privateKeyPem: $localActor->privateKey,
+            publicKeyPem: Asserted::notNull($localActor->publicKey),
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function toActivityPubActor(LocalActorInterface $localActor): Actor
     {
         Asserted::instanceOf($localActor, LocalActor::class);
-        $actor = $this->typeClassRegistry->actorFromType($localActor->type);
+        $actor = $this->typeClassRegistry->actorFromType(ActorType::from($localActor->type));
         $actor->jsonLdContext = new JsonLdContext(['https://w3id.org/security/v1']);
         $actor->id = $this->localActorUriGenerator->generateId($localActor->getUsername());
         $actor->inbox = $this->localActorUriGenerator->generateInbox($localActor->getUsername());
@@ -70,7 +74,7 @@ class LocalActorService implements LocalActorServiceInterface
         $actor->publicKey = new PublicKey(
             id: $actor->getId()->withFragment('main-key'),
             owner: $actor->id,
-            publicKeyPem: $localActor->publicKeyPem
+            publicKeyPem: Asserted::notNull($localActor->publicKey)
         );
 
         return $actor;

@@ -21,9 +21,9 @@ class Share
         #[ORM\Column(type: UriType::NAME)]
         public /*readonly*/ Uri $actorId,
 
-        #[ORM\ManyToOne(targetEntity: LocalObject::class)]
+        #[ORM\ManyToOne(targetEntity: StoredObject::class)]
         #[ORM\JoinColumn(nullable: false)]
-        public /*readonly*/ LocalObject $localObject,
+        public /*readonly*/ StoredObject $localObject,
 
         ?DateTimeInterface $created = null
     ) {

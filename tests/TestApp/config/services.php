@@ -7,7 +7,6 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowService;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowServiceInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Service\HttpClient\KernelBrowserHttpClient;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Service\LocalActorService;
-use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Service\LocalObjectResolver;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -32,12 +31,6 @@ return function (ContainerConfigurator $configurator): void {
         ->args([
             service('test.client')
         ]);
-
-//    // TODO: Why is this not tagged automatically?
-//    $services->set(LocalNoteService::class)
-//        ->autowire()
-//        ->autoconfigure()
-//        ->tag(Tag::LOCAL_OBJECT_PROVIDER);
 
     $services->alias(HttpClientInterface::class, KernelBrowserHttpClient::class);
     $services->alias(LocalActorServiceInterface::class, LocalActorService::class);

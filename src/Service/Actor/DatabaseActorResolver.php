@@ -5,14 +5,13 @@ namespace Dontdrinkandroot\ActivityPubOrmBundle\Service\Actor;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\CoreType;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Actor\Actor;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Actor\Actor as ActivityPubActor;
-use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Actor\ActorType;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Serializer\ActivityStreamEncoder;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\ActorResolverInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Client\ActivityPubClientInterface;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor as DbActor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\RawType;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ActorRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredActorRepository;
 use Dontdrinkandroot\Common\Asserted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -22,7 +21,7 @@ class DatabaseActorResolver implements ActorResolverInterface
 {
     public function __construct(
         private readonly ActivityPubClientInterface $activityPubClient,
-        private readonly ActorRepository $actorRepository,
+        private readonly StoredActorRepository $actorRepository,
         private readonly CacheInterface $cache,
         private readonly SerializerInterface $serializer
     ) {
@@ -61,10 +60,10 @@ class DatabaseActorResolver implements ActorResolverInterface
         return $this->findOrCreate($actorId)?->publicKey;
     }
 
-    private function findOrCreate(Uri $actorId): ?DbActor
+    private function findOrCreate(Uri $actorId): ?StoredActor
     {
         // TODO: refetch if expired
-        $dbActor = $this->actorRepository->findByUri($actorId);
+        $dbActor = $this->actorRepository->findOneByUri($actorId);
         if (null !== $dbActor) {
             return $dbActor;
         }
@@ -73,15 +72,14 @@ class DatabaseActorResolver implements ActorResolverInterface
         if (null === $actor) {
             return null;
         }
-        $dbActor = new DbActor(
+        $dbActor = new StoredActor(
             uri: $actor->getId(),
-            type: ActorType::from($actor->getType()),
+            type: $actor->getType(),
             raw: new RawType(
-                uri: $actor->getId(),
-                type: $actor->getType(),
                 content: $this->serializer->serialize($actor, ActivityStreamEncoder::FORMAT)
             ),
             preferredUsername: $actor->preferredUsername,
+            domain: Asserted::notNull($actorId->host),
             name: $actor->name,
             summary: $actor->summary,
             inbox: $actor->inbox,

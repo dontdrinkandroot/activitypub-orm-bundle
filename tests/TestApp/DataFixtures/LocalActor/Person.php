@@ -2,33 +2,32 @@
 
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalActor;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Actor\ActorType;
-use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalActor;
 
-class Person extends Fixture
+class Person extends AbstractLocalActorFixture
 {
     public const USERNAME = 'person';
 
     /**
      * {@inheritdoc}
      */
-    public function load(ObjectManager $manager): void
+    protected function getUsername(): string
     {
-        $localActor = new LocalActor(
-            self::USERNAME,
-            ActorType::PERSON,
-            $this->getPrivateKeyPem(),
-            $this->getPublicKeyPem()
-        );
-
-        $manager->persist($localActor);
-        $manager->flush();
-        $this->addReference(self::class, $localActor);
+        return self::USERNAME;
     }
 
-    private function getPrivateKeyPem(): string
+    /**
+     * {@inheritdoc}
+     */
+    protected function getType(): string
+    {
+        return ActorType::PERSON->value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getPrivateKeyPem(): string
     {
         return <<<PEM
 -----BEGIN RSA PRIVATE KEY-----
@@ -61,7 +60,10 @@ krjA/89F2dBnRAfRVN7/Y67WxpQIgG9GxZDsm2chMpznXk8PYBxM
 PEM;
     }
 
-    private function getPublicKeyPem(): string
+    /**
+     * {@inheritdoc}
+     */
+    protected function getPublicKeyPem(): string
     {
         return <<<PEM
 -----BEGIN PUBLIC KEY-----

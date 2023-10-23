@@ -3,10 +3,10 @@
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
-use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Actor\ActorType;
+use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubOrmBundle\Doctrine\Dbal\Type\UriType;
-use Doctrine\ORM\Mapping as ORM;
+use RuntimeException;
 
 #[ORM\Entity]
 #[ORM\InheritanceType(value: 'JOINED')]
@@ -16,7 +16,7 @@ class StoredObject
     use EntityTrait;
 
     #[ORM\Column(type: Types::BIGINT)]
-    public int $updated;
+    protected ?int $updated = null;
 
     public function __construct(
         #[ORM\Column(type: UriType::NAME, unique: true)]
@@ -25,8 +25,14 @@ class StoredObject
         #[ORM\Column(type: Types::STRING)]
         public /* readonly */ string $type,
 
-        #[ORM\OneToOne(targetEntity: RawType::class, cascade: ["persist", "remove"], fetch: 'LAZY')]
+        //TODO: Make lazy again
+        #[ORM\OneToOne(targetEntity: RawType::class, cascade: ["persist", "remove"] /* , fetch: 'LAZY' */)]
         public /* readonly */ RawType $raw,
     ) {
+    }
+
+    public function getUpdated(): int
+    {
+        return $this->updated ?? throw new RuntimeException('Entity not persisted yet');
     }
 }

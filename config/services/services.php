@@ -11,8 +11,9 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowService;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowServiceInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Object\LocalObjectResolverInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Share\ShareServiceInterface;
+use Dontdrinkandroot\ActivityPubOrmBundle\Event\Listener\StoredObjectUpdatedListener;
 use Dontdrinkandroot\ActivityPubOrmBundle\Model\Container\Tag;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ActorRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredActorRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Actor\DatabaseActorResolver;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\DeliveryService;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Follow\FollowerStorage;
@@ -21,7 +22,6 @@ use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityR
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityResolverInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\ShareService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
 use Symfony\Component\Serializer\SerializerInterface;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -46,11 +46,15 @@ return function (ContainerConfigurator $configurator): void {
     $services->set(DatabaseActorResolver::class)
         ->args([
             service(ActivityPubClientInterface::class),
-            service(ActorRepository::class),
+            service(StoredActorRepository::class),
             service('cache.app'),
             service(SerializerInterface::class)
         ]);
     $services->alias(ActorResolverInterface::class, DatabaseActorResolver::class);
+
+    $services->set(StoredObjectUpdatedListener::class)
+        ->tag('doctrine.event_listener', ['event' => 'prePersist'])
+        ->tag('doctrine.event_listener', ['event' => 'preUpdate']);
 
     $services->alias(LocalObjectEntityResolverInterface::class, LocalObjectEntityResolver::class);
     $services->alias(LocalObjectResolverInterface::class, LocalObjectEntityResolver::class);

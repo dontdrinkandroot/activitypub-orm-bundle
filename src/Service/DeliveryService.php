@@ -20,7 +20,8 @@ class DeliveryService implements DeliveryServiceInterface
         private readonly PendingDeliveryRepository $pendingDeliveryRepository,
         private readonly LocalActorServiceInterface $localActorService,
         private readonly ActivityPubClientInterface $activityPubClient,
-        private readonly SerializerInterface $serializer
+        private readonly SerializerInterface $serializer,
+        private bool $throwExceptions = false
     ) {
     }
 
@@ -35,6 +36,10 @@ class DeliveryService implements DeliveryServiceInterface
         try {
             $this->activityPubClient->request('POST', $recipientInbox, $payload, $signKey);
         } catch (Exception $e) {
+            if ($this->throwExceptions) {
+                throw $e;
+            }
+
             $pendingDelivery = new PendingDelivery(
                 $localActor,
                 $recipientInbox,
@@ -64,5 +69,10 @@ class DeliveryService implements DeliveryServiceInterface
                 $this->pendingDeliveryRepository->update($pendingDelivery);
             }
         }
+    }
+
+    public function setThrowExceptions(bool $throwExceptions): void
+    {
+        $this->throwExceptions = $throwExceptions;
     }
 }

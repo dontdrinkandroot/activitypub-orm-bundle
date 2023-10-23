@@ -16,9 +16,10 @@ class AnnounceTest extends WebTestCase
     public function testIncomingAnnounce(): void
     {
         self::bootKernel();
-        $this->loadFixtures([Person::class, Service::class, PersonNote1::class]);
+        $referenceRepository = $this->loadFixtures([Person::class, Service::class, PersonNote1::class]);
         $activityPubClient = self::getService(ActivityPubClientInterface::class);
         $localActorService = self::getService(LocalActorServiceInterface::class);
+
         $service = $localActorService->findLocalActorByUsername('service');
         self::assertNotNull($service);
         $signKey = $localActorService->getSignKey($service);
