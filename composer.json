@@ -21,7 +21,7 @@
     "repositories": [
         {
             "type": "git",
-            "url": "git@github.com:dontdrinkandroot/activitypub-core-bundle.git"
+            "url": "https://github.com/dontdrinkandroot/activitypub-core-bundle.git"
         }
     ],
     "autoload": {
