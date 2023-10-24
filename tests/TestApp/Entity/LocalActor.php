@@ -13,8 +13,6 @@ use RuntimeException;
 #[ORM\Entity]
 class LocalActor extends StoredActor implements LocalActorInterface
 {
-    use EntityTrait;
-
     public function __construct(
         Uri $uri,
         string $type,

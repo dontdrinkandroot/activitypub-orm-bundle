@@ -29,9 +29,6 @@ class DatabaseActorResolver implements ActorResolverInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resolve(Uri $actorId): ?Actor
     {
         $dbActor = $this->findOrCreate($actorId);
@@ -40,7 +37,7 @@ class DatabaseActorResolver implements ActorResolverInterface
         }
 
         $content = Asserted::notNull(
-            $this->objectContentRepository->find($dbActor->getId())?->getContent(),
+            $this->objectContentRepository->find($dbActor->getId())?->content,
             'Actor content not found'
         );
         return $this->serializer->deserialize(

@@ -11,8 +11,6 @@ use Dontdrinkandroot\ActivityPubOrmBundle\Doctrine\Dbal\Type\UriType;
 #[ORM\Table(name: 'actor')]
 class StoredActor extends StoredObject
 {
-    use EntityTrait;
-
     public function __construct(
         Uri $uri,
         string $type,
