@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\EntityTrait;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\RawType;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
 use RuntimeException;
 
@@ -29,15 +28,14 @@ class LocalActor extends StoredActor implements LocalActorInterface
         ?string $summary = null,
     ) {
         parent::__construct(
-            $uri,
-            $type,
-            new RawType(''),
-            $preferredUsername,
-            $domain,
-            $name,
-            $summary,
-            $inbox,
-            $publicKey
+            uri: $uri,
+            type: $type,
+            preferredUsername: $preferredUsername,
+            domain: $domain,
+            name: $name,
+            summary: $summary,
+            inbox: $inbox,
+            publicKey: $publicKey
         );
     }
 

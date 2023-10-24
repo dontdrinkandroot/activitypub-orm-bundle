@@ -24,10 +24,6 @@ class StoredObject
 
         #[ORM\Column(type: Types::STRING)]
         public /* readonly */ string $type,
-
-        //TODO: Make lazy again
-        #[ORM\OneToOne(targetEntity: RawType::class, cascade: ["persist", "remove"] /* , fetch: 'LAZY' */)]
-        public /* readonly */ RawType $raw,
     ) {
     }
 

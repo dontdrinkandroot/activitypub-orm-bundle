@@ -121,7 +121,7 @@ abstract class AbstractFollowStorage implements FollowStorageInterface
         $follows = $this->repository->findByLocalActorAndAccepted($localActor, $accepted, $offset, $limit);
 
         return array_map(
-            fn(AbstractFollow $follower) => $follower->remoteActor->getId(),
+            fn(AbstractFollow $follower) => $follower->remoteActor->uri,
             $follows
         );
     }

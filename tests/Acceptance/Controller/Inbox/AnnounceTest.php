@@ -38,8 +38,9 @@ class AnnounceTest extends WebTestCase
         );
 
         $shareRepository = self::getService(ShareRepository::class);
-        $shared = $shareRepository->findAll();
-        self::assertCount(1, $shared);
-        self::assertEquals('http://localhost/@service', $shared[0]->actorId);
+        $shares = $shareRepository->findAll();
+        self::assertCount(1, $shares);
+        $share = $shares[0];
+        self::assertEquals('http://localhost/@service', $share->actor->uri);
     }
 }

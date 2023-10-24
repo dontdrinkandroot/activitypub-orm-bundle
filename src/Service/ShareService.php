@@ -7,6 +7,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Share\ShareServiceInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Share;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ShareRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Service\Actor\DatabaseActorResolver;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityResolverInterface;
 use RuntimeException;
 
@@ -14,7 +15,8 @@ class ShareService implements ShareServiceInterface
 {
     public function __construct(
         private readonly ShareRepository $shareRepository,
-        private readonly LocalObjectEntityResolverInterface $localObjectEntityResolver
+        private readonly LocalObjectEntityResolverInterface $localObjectEntityResolver,
+        private readonly DatabaseActorResolver $actorResolver
     ) {
     }
 
@@ -23,9 +25,11 @@ class ShareService implements ShareServiceInterface
      */
     public function shared(Uri $remoteActorId, Uri $localObjectId): void
     {
+        $actor = $this->actorResolver->findOrCreate($remoteActorId)
+            ?? throw new RuntimeException('Remote Actor not found');
         $localObject = $this->localObjectEntityResolver->resolve($localObjectId)
             ?? throw new RuntimeException('Local object not found');
-        $share = new Share($remoteActorId, $localObject);
+        $share = new Share($actor, $localObject);
         $this->shareRepository->create($share);
     }
 

@@ -10,8 +10,6 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Object\Note;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Linkable\LinkableObjectsCollection;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Source;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
-use Dontdrinkandroot\ActivityPubCoreBundle\Serializer\ActivityStreamEncoder;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\RawType;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalActor\Person;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalActor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalNote;
@@ -72,13 +70,12 @@ class PersonNote1 extends Fixture implements DependentFixtureInterface
             ['uuid' => self::UUID],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
-        $serialized = $this->serializer->serialize($activityPubNote, ActivityStreamEncoder::FORMAT);
+
         $localObject = new LocalNote(
             uri: Uri::fromString($uri),
             attributedTo: $localActor,
             uuid: Uuid::fromString(self::UUID),
             source: $sourceContent,
-            raw: new RawType($serialized)
         );
 
         $manager->persist($localObject);

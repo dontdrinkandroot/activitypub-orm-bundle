@@ -13,6 +13,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Service\Object\LocalObjectResolverInt
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Share\ShareServiceInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Event\Listener\StoredObjectUpdatedListener;
 use Dontdrinkandroot\ActivityPubOrmBundle\Model\Container\Tag;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ObjectContentRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredActorRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Actor\DatabaseActorResolver;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\DeliveryService;
@@ -48,7 +49,8 @@ return function (ContainerConfigurator $configurator): void {
             service(ActivityPubClientInterface::class),
             service(StoredActorRepository::class),
             service('cache.app'),
-            service(SerializerInterface::class)
+            service(SerializerInterface::class),
+            service(ObjectContentRepository::class)
         ]);
     $services->alias(ActorResolverInterface::class, DatabaseActorResolver::class);
 

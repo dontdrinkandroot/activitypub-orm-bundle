@@ -4,7 +4,6 @@ namespace Dontdrinkandroot\ActivityPubOrmBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Actor\ActorType;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubOrmBundle\Doctrine\Dbal\Type\UriType;
 
@@ -17,7 +16,6 @@ class StoredActor extends StoredObject
     public function __construct(
         Uri $uri,
         string $type,
-        RawType $raw,
 
         #[ORM\Column(type: Types::STRING, nullable: true)]
         public ?string $preferredUsername = null,
@@ -38,6 +36,6 @@ class StoredActor extends StoredObject
         public ?string $publicKey = null,
 
     ) {
-        parent::__construct($uri, $type, $raw);
+        parent::__construct($uri, $type);
     }
 }

@@ -9,8 +9,9 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Serializer\ActivityStreamEncoder;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\ActorResolverInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Client\ActivityPubClientInterface;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\RawType;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\ObjectContent;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ObjectContentRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredActorRepository;
 use Dontdrinkandroot\Common\Asserted;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -23,7 +24,8 @@ class DatabaseActorResolver implements ActorResolverInterface
         private readonly ActivityPubClientInterface $activityPubClient,
         private readonly StoredActorRepository $actorRepository,
         private readonly CacheInterface $cache,
-        private readonly SerializerInterface $serializer
+        private readonly SerializerInterface $serializer,
+        private readonly ObjectContentRepository $objectContentRepository
     ) {
     }
 
@@ -37,8 +39,12 @@ class DatabaseActorResolver implements ActorResolverInterface
             return null;
         }
 
+        $content = Asserted::notNull(
+            $this->objectContentRepository->find($dbActor->getId())?->getContent(),
+            'Actor content not found'
+        );
         return $this->serializer->deserialize(
-            $dbActor->raw->content,
+            $content,
             CoreType::class,
             ActivityStreamEncoder::FORMAT
         );
@@ -75,9 +81,6 @@ class DatabaseActorResolver implements ActorResolverInterface
         $dbActor = new StoredActor(
             uri: $actor->getId(),
             type: $actor->getType(),
-            raw: new RawType(
-                content: $this->serializer->serialize($actor, ActivityStreamEncoder::FORMAT)
-            ),
             preferredUsername: $actor->preferredUsername,
             domain: Asserted::notNull($actorId->host),
             name: $actor->name,
@@ -86,6 +89,9 @@ class DatabaseActorResolver implements ActorResolverInterface
             publicKey: $actor->publicKey?->publicKeyPem
         );
         $this->actorRepository->create($dbActor);
+        $this->objectContentRepository->create(
+            new ObjectContent($dbActor, $this->serializer->serialize($actor, ActivityStreamEncoder::FORMAT))
+        );
 
         return $dbActor;
     }

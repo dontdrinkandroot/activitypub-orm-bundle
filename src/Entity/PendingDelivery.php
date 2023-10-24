@@ -25,13 +25,13 @@ class PendingDelivery
     public function __construct(
         #[ORM\ManyToOne(targetEntity: LocalActorInterface::class)]
         #[ORM\JoinColumn(nullable: false)]
-        public /*readonly*/ LocalActorInterface $localActor,
+        public /* readonly */ LocalActorInterface $localActor,
 
         #[ORM\Column(type: UriType::NAME, length: 255)]
-        public /*readonly*/ Uri $recipientInbox,
+        public /* readonly */ Uri $recipientInbox,
 
         #[ORM\Column(type: PlainJsonType::NAME)]
-        public /*readonly*/ string $payload
+        public /* readonly */ string $payload
     ) {
         $this->nextDelivery = new DateTimeImmutable();
     }

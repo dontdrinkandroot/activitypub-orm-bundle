@@ -5,7 +5,6 @@ namespace Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\RawType;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredObject;
 use Symfony\Component\Uid\Uuid;
 
@@ -21,8 +20,7 @@ class LocalNote extends StoredObject
         public Uuid $uuid,
         #[ORM\Column(type: 'text')]
         public string $source,
-        RawType $raw,
     ) {
-        parent::__construct($uri, 'Note', $raw);
+        parent::__construct($uri, 'Note');
     }
 }
