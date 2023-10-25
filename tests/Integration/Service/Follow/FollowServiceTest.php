@@ -21,35 +21,35 @@ class FollowServiceTest extends WebTestCase
         $followService = self::getService(FollowServiceInterface::class);
         $followService->follow(
             localActor: $localActorPerson,
-            remoteActorId: Uri::fromString('http://localhost/@service')
+            remoteActorId: Uri::fromString('https://localhost/@service')
         );
 
         $followState = $followService->findFollowerState(
             localActor: $localActorService,
-            remoteActorId: Uri::fromString('http://localhost/@person')
+            remoteActorId: Uri::fromString('https://localhost/@person')
         );
         self::assertEquals(FollowState::PENDING, $followState);
 
         $followState = $followService->findFollowingState(
             localActor: $localActorPerson,
-            remoteActorId: Uri::fromString('http://localhost/@service')
+            remoteActorId: Uri::fromString('https://localhost/@service')
         );
         self::assertEquals(FollowState::PENDING, $followState);
 
         $followService->unfollow(
             localActor: $localActorPerson,
-            remoteActorId: Uri::fromString('http://localhost/@service')
+            remoteActorId: Uri::fromString('https://localhost/@service')
         );
 
         $followState = $followService->findFollowerState(
             localActor: $localActorService,
-            remoteActorId: Uri::fromString('http://localhost/@person')
+            remoteActorId: Uri::fromString('https://localhost/@person')
         );
         self::assertNull($followState);
 
         $followState = $followService->findFollowingState(
             localActor: $localActorPerson,
-            remoteActorId: Uri::fromString('http://localhost/@service')
+            remoteActorId: Uri::fromString('https://localhost/@service')
         );
         self::assertNull($followState);
     }

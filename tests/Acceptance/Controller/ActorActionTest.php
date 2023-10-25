@@ -38,15 +38,15 @@ class ActorActionTest extends WebTestCase
                 'https://www.w3.org/ns/activitystreams',
                 'https://w3id.org/security/v1',
             ],
-            'id' => 'http://localhost/@person',
-            'inbox' => 'http://localhost/@person/inbox',
+            'id' => 'https://localhost/@person',
+            'inbox' => 'https://localhost/@person/inbox',
             'preferredUsername' => 'person',
 //            'name' => 'Person',
 //            'published' => '2000-01-02T03:04:05Z',
 //            'summary' => 'A person',
             'publicKey' => [
-                'id' => 'http://localhost/@person#main-key',
-                'owner' => 'http://localhost/@person'
+                'id' => 'https://localhost/@person#main-key',
+                'owner' => 'https://localhost/@person'
             ],
             'type' => 'Person'
         ], $data);

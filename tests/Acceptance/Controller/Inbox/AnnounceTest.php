@@ -31,7 +31,7 @@ class AnnounceTest extends WebTestCase
                 '@context' => 'https://www.w3.org/ns/activitystreams',
 //                'id' => 'https://example.com/activities/1',
                 'type' => 'Announce',
-                'actor' => 'http://localhost/@service',
+                'actor' => 'https://localhost/@service',
                 'object' => PersonNote1::URI,
             ], JSON_THROW_ON_ERROR),
             signKey: $signKey
@@ -41,6 +41,6 @@ class AnnounceTest extends WebTestCase
         $shares = $shareRepository->findAll();
         self::assertCount(1, $shares);
         $share = $shares[0];
-        self::assertEquals('http://localhost/@service', $share->actor->uri);
+        self::assertEquals('https://localhost/@service', $share->actor->uri);
     }
 }
