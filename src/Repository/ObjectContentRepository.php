@@ -6,9 +6,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\ObjectContent;
 
 /**
- * @extends AbstractFollowRepository<ObjectContent>
+ * @extends CrudServiceEntityRepository<ObjectContent>
  */
-class ObjectContentRepository extends AbstractFollowRepository
+class ObjectContentRepository extends CrudServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
