@@ -122,11 +122,6 @@ class FollowStorage implements FollowStorageInterface
         FollowState $followState = FollowState::ACCEPTED
     ): int
     {
-        $accepted = match ($followState) {
-            FollowState::ACCEPTED => true,
-            FollowState::PENDING => false,
-        };
-
-        return $this->repository->countByLocalActor($localActor, $direction, $accepted);
+        return $this->repository->countByLocalActor($localActor, $direction, $followState);
     }
 }

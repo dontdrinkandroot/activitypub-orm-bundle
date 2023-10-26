@@ -48,7 +48,7 @@ class FollowRepository extends CrudServiceEntityRepository
         $queryBuilder = $this->createQueryBuilder('follow')
             ->where('follow.localActor = :localActor')
             ->andWhere('follow.direction = :direction')
-            ->andWhere('follow.accepted = :accepted')
+            ->andWhere('follow.state = :state')
             ->setParameter('localActor', $localActor)
             ->setParameter('direction', $direction)
             ->setParameter('state', $followState)
@@ -58,15 +58,15 @@ class FollowRepository extends CrudServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function countByLocalActor(LocalActorInterface $localActor, Direction $direction, bool $accepted = true): int
+    public function countByLocalActor(LocalActorInterface $localActor, Direction $direction,  FollowState $followState = FollowState::ACCEPTED,): int
     {
         $queryBuilder = $this->createQueryBuilder('follow')
             ->select('COUNT(follow)')
             ->where('follow.localActor = :localActor')
             ->andWhere('follow.direction = :direction')
-            ->andWhere('follow.accepted = :accepted')
+            ->andWhere('follow.state = :state')
             ->setParameter('localActor', $localActor)
-            ->setParameter('accepted', $accepted)
+            ->setParameter('state', $followState)
             ->setParameter('direction', $direction);
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
