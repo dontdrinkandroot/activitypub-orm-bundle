@@ -2,7 +2,7 @@
 
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Model\Container;
 
-class Tag
+class TagName
 {
     public const LOCAL_OBJECT_PROVIDER = 'ddr.activity_pub_orm.local_object_provider';
 }

@@ -3,8 +3,8 @@
 namespace Dontdrinkandroot\ActivityPubOrmBundle\DependencyInjection;
 
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
-use Dontdrinkandroot\ActivityPubOrmBundle\Model\Container\Param;
-use Dontdrinkandroot\ActivityPubOrmBundle\Model\Container\Tag;
+use Dontdrinkandroot\ActivityPubOrmBundle\Model\Container\ParamName;
+use Dontdrinkandroot\ActivityPubOrmBundle\Model\Container\TagName;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityProviderInterface;
 use InvalidArgumentException;
 use Symfony\Component\Config\FileLocator;
@@ -28,7 +28,7 @@ class DdrActivityPubOrmExtension extends Extension implements PrependExtensionIn
 
         $container
             ->registerForAutoconfiguration(LocalObjectEntityProviderInterface::class)
-            ->addTag(Tag::LOCAL_OBJECT_PROVIDER);
+            ->addTag(TagName::LOCAL_OBJECT_PROVIDER);
     }
 
     /**
@@ -50,7 +50,7 @@ class DdrActivityPubOrmExtension extends Extension implements PrependExtensionIn
                 )
             );
         }
-        $container->setParameter(Param::LOCAL_ACTOR_CLASS, $localActorClass);
+        $container->setParameter(ParamName::LOCAL_ACTOR_CLASS, $localActorClass);
 
         $container->prependExtensionConfig(
             'doctrine',

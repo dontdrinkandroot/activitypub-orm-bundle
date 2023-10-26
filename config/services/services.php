@@ -9,17 +9,17 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowService;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowServiceInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowStorageInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Object\LocalObjectResolverInterface;
-use Dontdrinkandroot\ActivityPubCoreBundle\Service\Share\ShareServiceInterface;
+use Dontdrinkandroot\ActivityPubCoreBundle\Service\Share\InteractionServiceInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Event\Listener\StoredObjectUpdatedListener;
-use Dontdrinkandroot\ActivityPubOrmBundle\Model\Container\Tag;
+use Dontdrinkandroot\ActivityPubOrmBundle\Model\Container\TagName;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ObjectContentRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredActorRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Actor\DatabaseActorResolver;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\DeliveryService;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Follow\FollowStorage;
+use Dontdrinkandroot\ActivityPubOrmBundle\Service\InteractionService;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityResolver;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityResolverInterface;
-use Dontdrinkandroot\ActivityPubOrmBundle\Service\ShareService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -39,7 +39,7 @@ return function (ContainerConfigurator $configurator): void {
 
     $services->set(LocalObjectEntityResolver::class)
         ->args([
-            tagged_iterator(Tag::LOCAL_OBJECT_PROVIDER)
+            tagged_iterator(TagName::LOCAL_OBJECT_PROVIDER)
         ]);
 
     $services->set(DatabaseActorResolver::class)
@@ -60,6 +60,6 @@ return function (ContainerConfigurator $configurator): void {
     $services->alias(LocalObjectResolverInterface::class, LocalObjectEntityResolver::class);
     $services->alias(FollowStorageInterface::class, FollowStorage::class);
     $services->alias(DeliveryServiceInterface::class, DeliveryService::class);
-    $services->alias(ShareServiceInterface::class, ShareService::class);
+    $services->alias(InteractionServiceInterface::class, InteractionService::class);
     $services->alias(FollowServiceInterface::class, FollowService::class);
 };

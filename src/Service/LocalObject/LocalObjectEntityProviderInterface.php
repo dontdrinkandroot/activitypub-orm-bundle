@@ -7,7 +7,5 @@ use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredObject;
 
 interface LocalObjectEntityProviderInterface
 {
-    public function has(Uri $uri): bool;
-
-    public function provide(Uri $uri): ?StoredObject;
+    public function provideEntity(Uri $uri): StoredObject|false|null;
 }

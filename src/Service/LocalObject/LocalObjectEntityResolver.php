@@ -17,26 +17,12 @@ class LocalObjectEntityResolver implements LocalObjectEntityResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function hasObject(Uri $uri): bool
-    {
-        foreach ($this->providers as $provider) {
-            if ($provider->has($uri)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function resolve(Uri $uri): ?StoredObject
     {
         foreach ($this->providers as $provider) {
-            $object = $provider->provide($uri);
-            if (null !== $object) {
-                return $object;
+            $result = $provider->provideEntity($uri);
+            if (false !== $result) {
+                return $result;
             }
         }
 

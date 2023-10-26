@@ -5,7 +5,7 @@ namespace Dontdrinkandroot\ActivityPubOrmBundle\Tests\Acceptance\Controller\Inbo
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\LocalActorServiceInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Client\ActivityPubClientInterface;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ShareRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\InteractionRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalActor\Person;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalActor\Service;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalObject\PersonNote1;
@@ -29,7 +29,7 @@ class AnnounceTest extends WebTestCase
             uri: Uri::fromString('http://localhost/@person/inbox'),
             content: json_encode([
                 '@context' => 'https://www.w3.org/ns/activitystreams',
-//                'id' => 'https://example.com/activities/1',
+                'id' => 'https://localhost/interactions/12345',
                 'type' => 'Announce',
                 'actor' => 'https://localhost/@service',
                 'object' => PersonNote1::URI,
@@ -37,7 +37,7 @@ class AnnounceTest extends WebTestCase
             signKey: $signKey
         );
 
-        $shareRepository = self::getService(ShareRepository::class);
+        $shareRepository = self::getService(InteractionRepository::class);
         $shares = $shareRepository->findAll();
         self::assertCount(1, $shares);
         $share = $shares[0];
