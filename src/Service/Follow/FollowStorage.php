@@ -8,15 +8,16 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowStorageInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Follow;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\FollowRepository;
-use Dontdrinkandroot\ActivityPubOrmBundle\Service\Actor\DatabaseActorResolver;
+use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\StoredObjectResolverInterface;
 use RuntimeException;
 
 class FollowStorage implements FollowStorageInterface
 {
     public function __construct(
         private readonly FollowRepository $repository,
-        private readonly DatabaseActorResolver $actorResolver
+        private readonly StoredObjectResolverInterface $storedObjectResolver,
     ) {
     }
 
@@ -25,7 +26,7 @@ class FollowStorage implements FollowStorageInterface
      */
     public function add(LocalActorInterface $localActor, Uri $remoteActorId, Direction $direction): void
     {
-        $remoteActor = $this->actorResolver->findOrCreate($remoteActorId)
+        $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
             ?? throw new RuntimeException('Remote Actor not found');
         $follow = $this->repository->findOneByLocalActorAndRemoteActor($localActor, $remoteActor, $direction);
         if (null !== $follow) {
@@ -41,7 +42,7 @@ class FollowStorage implements FollowStorageInterface
      */
     public function accept(LocalActorInterface $localActor, Uri $remoteActorId, Direction $direction): void
     {
-        $remoteActor = $this->actorResolver->findOrCreate($remoteActorId)
+        $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
             ?? throw new RuntimeException('Remote Actor not found');
         $follow = $this->repository->findOneByLocalActorAndRemoteActor($localActor, $remoteActor, $direction);
         if (null === $follow) {
@@ -57,7 +58,7 @@ class FollowStorage implements FollowStorageInterface
      */
     public function reject(LocalActorInterface $localActor, Uri $remoteActorId, Direction $direction): void
     {
-        $remoteActor = $this->actorResolver->findOrCreate($remoteActorId)
+        $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
             ?? throw new RuntimeException('Remote Actor not found');
         $follow = $this->repository->findOneByLocalActorAndRemoteActor($localActor, $remoteActor, $direction);
         if (null === $follow) {
@@ -72,7 +73,7 @@ class FollowStorage implements FollowStorageInterface
      */
     public function remove(LocalActorInterface $localActor, Uri $remoteActorId, Direction $direction): void
     {
-        $remoteActor = $this->actorResolver->findOrCreate($remoteActorId)
+        $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
             ?? throw new RuntimeException('Remote Actor not found');
         $follow = $this->repository->findOneByLocalActorAndRemoteActor($localActor, $remoteActor, $direction);
         if (null !== $follow) {
@@ -85,7 +86,7 @@ class FollowStorage implements FollowStorageInterface
      */
     public function findState(LocalActorInterface $localActor, Uri $remoteActorId, Direction $direction): ?FollowState
     {
-        $remoteActor = $this->actorResolver->findOrCreate($remoteActorId)
+        $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
             ?? throw new RuntimeException('Remote Actor not found');
         $follow = $this->repository->findOneByLocalActorAndRemoteActor($localActor, $remoteActor, $direction);
         if (null === $follow) {

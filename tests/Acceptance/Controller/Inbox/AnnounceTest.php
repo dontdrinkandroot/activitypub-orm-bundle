@@ -6,8 +6,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\LocalActorServiceInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Client\ActivityPubClientInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\InteractionRepository;
-use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalActor\Person;
-use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalActor\Service;
+use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\FixtureSetDefault;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalObject\PersonNote1;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\WebTestCase;
 
@@ -16,7 +15,7 @@ class AnnounceTest extends WebTestCase
     public function testIncomingAnnounce(): void
     {
         self::bootKernel();
-        $referenceRepository = $this->loadFixtures([Person::class, Service::class, PersonNote1::class]);
+        $referenceRepository = self::loadFixtures([FixtureSetDefault::class]);
         $activityPubClient = self::getService(ActivityPubClientInterface::class);
         $localActorService = self::getService(LocalActorServiceInterface::class);
 

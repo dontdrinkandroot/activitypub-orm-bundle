@@ -6,6 +6,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Model\Container\ParamName;
 use Dontdrinkandroot\ActivityPubOrmBundle\Model\Container\TagName;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityProviderInterface;
+use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\DatabaseObjectPersisterInterface;
 use InvalidArgumentException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -29,6 +30,10 @@ class DdrActivityPubOrmExtension extends Extension implements PrependExtensionIn
         $container
             ->registerForAutoconfiguration(LocalObjectEntityProviderInterface::class)
             ->addTag(TagName::LOCAL_OBJECT_PROVIDER);
+
+        $container
+            ->registerForAutoconfiguration(DatabaseObjectPersisterInterface::class)
+            ->addTag(TagName::DATABASE_OBJECT_PERSISTER);
     }
 
     /**

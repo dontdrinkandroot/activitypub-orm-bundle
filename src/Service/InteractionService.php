@@ -6,9 +6,10 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\Direction;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Share\InteractionServiceInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Interaction;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\InteractionRepository;
-use Dontdrinkandroot\ActivityPubOrmBundle\Service\Actor\DatabaseActorResolver;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityResolverInterface;
+use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\StoredObjectResolverInterface;
 use RuntimeException;
 
 class InteractionService implements InteractionServiceInterface
@@ -16,7 +17,7 @@ class InteractionService implements InteractionServiceInterface
     public function __construct(
         private readonly InteractionRepository $shareRepository,
         private readonly LocalObjectEntityResolverInterface $localObjectEntityResolver,
-        private readonly DatabaseActorResolver $actorResolver
+        private readonly StoredObjectResolverInterface $storedObjectResolver,
     ) {
     }
 
@@ -25,7 +26,7 @@ class InteractionService implements InteractionServiceInterface
      */
     public function incoming(Uri $uri, string $type, Uri $remoteActorId, Uri $localObjectId): void
     {
-        $actor = $this->actorResolver->findOrCreate($remoteActorId)
+        $actor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
             ?? throw new RuntimeException('Remote Actor not found');
         $localObject = $this->localObjectEntityResolver->resolve($localObjectId)
             ?? throw new RuntimeException('Local object not found');

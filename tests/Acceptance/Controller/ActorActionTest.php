@@ -2,8 +2,7 @@
 
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Tests\Acceptance\Controller;
 
-use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalActor\Person;
-use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalActor\Service;
+use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\FixtureSetDefault;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\WebTestCase;
 
 class ActorActionTest extends WebTestCase
@@ -21,7 +20,7 @@ class ActorActionTest extends WebTestCase
     public function testActor(): void
     {
         $client = static::createClient();
-        self::loadFixtures([Person::class, Service::class]);
+        self::loadFixtures([FixtureSetDefault::class]);
 
         $client->request('GET', '/@person');
         $response = $client->getResponse();

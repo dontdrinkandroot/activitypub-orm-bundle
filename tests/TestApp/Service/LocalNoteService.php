@@ -3,7 +3,7 @@
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Service;
 
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\SignKey;
-use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\CoreType;
+use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Core\CoreObject;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Object\Note;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Linkable\LinkableObjectsCollection;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
@@ -12,6 +12,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Service\Object\ObjectProviderInterfac
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityProviderInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalNote;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Repository\LocalNoteRepository;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -36,7 +37,7 @@ class LocalNoteService implements ObjectProviderInterface, LocalObjectEntityProv
     /**
      * {@inheritdoc}
      */
-    public function provide(Uri $uri, ?SignKey $signKey): CoreType|false|null
+    public function provide(Uri $uri, ?SignKey $signKey): CoreObject|false|null
     {
         $uuid = $this->findUuid($uri);
         if (null === $uuid) {
@@ -61,7 +62,11 @@ class LocalNoteService implements ObjectProviderInterface, LocalObjectEntityProv
     private function findUuid(Uri $uri): ?Uuid
     {
         $this->urlMatcher->getContext()->setMethod('GET');
-        $parameters = $this->urlMatcher->match($uri->getPathWithQueryAndFragment() ?? '');
+        try {
+            $parameters = $this->urlMatcher->match($uri->getPathWithQueryAndFragment() ?? '');
+        } catch (ResourceNotFoundException) {
+            return null;
+        }
         if ('ddr.activity_pub_orm.tests.note.get' !== ($parameters['_route'] ?? null)) {
             return null;
         }

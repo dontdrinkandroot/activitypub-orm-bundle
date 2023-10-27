@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\ActivityPubOrmBundle\Tests\Integration\Service\Follow
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\FollowState;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowServiceInterface;
+use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\FixtureSetDefault;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalActor\Person;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalActor\Service;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalActor;
@@ -14,7 +15,7 @@ class FollowServiceTest extends WebTestCase
 {
     public function testFollowUnfollow(): void
     {
-        $referenceRepository = self::loadFixtures([Person::class, Service::class]);
+        $referenceRepository = self::loadFixtures([FixtureSetDefault::class]);
         $localActorPerson = $referenceRepository->getReference(Person::class, LocalActor::class);
         $localActorService = $referenceRepository->getReference(Service::class, LocalActor::class);
 
