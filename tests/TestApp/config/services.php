@@ -3,6 +3,8 @@
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Config;
 
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\LocalActorServiceInterface;
+use Dontdrinkandroot\ActivityPubCoreBundle\Service\Client\ActivityPubClient;
+use Dontdrinkandroot\ActivityPubCoreBundle\Service\Client\ActivityPubClientInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowService;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowServiceInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Service\HttpClient\KernelBrowserHttpClient;
@@ -37,4 +39,5 @@ return function (ContainerConfigurator $configurator): void {
 
     /* Public */
     $services->alias(FollowServiceInterface::class, FollowService::class)->public();
+    $services->alias(ActivityPubClientInterface::class, ActivityPubClient::class)->public();
 };

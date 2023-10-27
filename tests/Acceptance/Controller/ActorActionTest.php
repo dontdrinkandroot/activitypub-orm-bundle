@@ -11,7 +11,7 @@ class ActorActionTest extends WebTestCase
     public function testMissingActor(): void
     {
         $client = static::createClient();
-        $this->loadFixtures();
+        self::loadFixtures();
 
         $client->request('GET', '/@missing');
         $response = $client->getResponse();
@@ -21,7 +21,7 @@ class ActorActionTest extends WebTestCase
     public function testActor(): void
     {
         $client = static::createClient();
-        $this->loadFixtures([Person::class, Service::class]);
+        self::loadFixtures([Person::class, Service::class]);
 
         $client->request('GET', '/@person');
         $response = $client->getResponse();

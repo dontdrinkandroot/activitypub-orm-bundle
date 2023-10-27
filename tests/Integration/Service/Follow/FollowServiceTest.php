@@ -14,7 +14,7 @@ class FollowServiceTest extends WebTestCase
 {
     public function testFollowUnfollow(): void
     {
-        $referenceRepository = $this->loadFixtures([Person::class, Service::class]);
+        $referenceRepository = self::loadFixtures([Person::class, Service::class]);
         $localActorPerson = $referenceRepository->getReference(Person::class, LocalActor::class);
         $localActorService = $referenceRepository->getReference(Service::class, LocalActor::class);
 

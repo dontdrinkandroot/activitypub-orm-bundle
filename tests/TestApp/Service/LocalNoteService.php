@@ -27,15 +27,6 @@ class LocalNoteService implements ObjectProviderInterface, LocalObjectEntityProv
     /**
      * {@inheritdoc}
      */
-    public function has(Uri $uri): bool
-    {
-        $uuid = $this->findUuid($uri);
-        return null !== $uuid && $this->localNoteRepository->findOneByUuid($uuid) !== null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function provideEntity(Uri $uri): LocalNote|false|null
     {
         $uuid = $this->findUuid($uri);

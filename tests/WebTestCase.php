@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 
 class WebTestCase extends BaseWebTestCase
 {
-    protected function loadFixtures(array $classNames = []): ReferenceRepository
+    protected static function loadFixtures(array $classNames = []): ReferenceRepository
     {
         $databaseTool = self::getService(DatabaseToolCollection::class)->get();
         return $databaseTool->loadFixtures($classNames)->getReferenceRepository();
