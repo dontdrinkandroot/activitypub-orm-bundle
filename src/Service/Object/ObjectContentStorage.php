@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Service\Object;
 
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Core\CoreObject;
-use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\CoreType;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Serializer\ActivityStreamEncoder;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\ObjectContent;
@@ -56,7 +55,7 @@ class ObjectContentStorage implements ObjectContentStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function find(Uri $uri, string $type = CoreType::class): ?CoreObject
+    public function find(Uri $uri, string $type = CoreObject::class): ?CoreObject
     {
         $content = $this->findContent($uri);
         if (null === $content) {
@@ -78,7 +77,7 @@ class ObjectContentStorage implements ObjectContentStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function fetch(Uri $uri, string $type = CoreType::class): CoreObject
+    public function fetch(Uri $uri, string $type = CoreObject::class): CoreObject
     {
         return $this->find($uri, $type) ?? throw new RuntimeException('Object not found');
     }
