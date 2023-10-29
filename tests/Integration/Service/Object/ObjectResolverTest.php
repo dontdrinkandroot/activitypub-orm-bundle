@@ -111,5 +111,9 @@ class ObjectResolverTest extends WebTestCase
         $storedActor = $actorRepository->findOneByUri($uri);
         self::assertNotNull($storedActor);
         self::assertInstanceOf(StoredActor::class, $storedActor);
+
+        /* Resolve again to test caching */
+        $resolvedActor = $objectResolver->resolve($uri);
+        self::assertNotNull($resolvedActor);
     }
 }

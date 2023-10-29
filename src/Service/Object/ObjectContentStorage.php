@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Service\Object;
 
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Core\CoreObject;
+use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\CoreType;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Serializer\ActivityStreamEncoder;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\ObjectContent;
@@ -62,7 +63,7 @@ class ObjectContentStorage implements ObjectContentStorageInterface
             return null;
         }
 
-        $object = $this->serializer->deserialize($content, $type, ActivityStreamEncoder::FORMAT);
+        $object = $this->serializer->deserialize($content, CoreType::class, ActivityStreamEncoder::FORMAT);
         return Asserted::instanceOf($object, $type);
     }
 
