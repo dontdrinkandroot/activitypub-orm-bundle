@@ -62,8 +62,8 @@ return function (ContainerConfigurator $configurator): void {
             service(ObjectContentStorageInterface::class),
             service(StoredObjectResolverInterface::class)
         ])
-        ->tag(TagName::DATABASE_OBJECT_PERSISTER, ['priority' => -128]);
-    $services->alias(ActorResolverInterface::class, DatabaseActorService::class);
+        ->tag(TagName::DATABASE_OBJECT_PERSISTER, ['priority' => -128])
+        ->tag(CoreTagName::OBJECT_PROVIDER, ['priority' => -64]);
 
     $services->set(StoredObjectUpdatedListener::class)
         ->tag('doctrine.event_listener', ['event' => 'prePersist'])
