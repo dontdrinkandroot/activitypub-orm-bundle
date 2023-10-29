@@ -27,9 +27,9 @@ class InteractionService implements InteractionServiceInterface
     public function incoming(Uri $uri, string $type, Uri $remoteActorId, Uri $localObjectId): void
     {
         $actor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
-            ?? throw new RuntimeException('Remote Actor not found');
+            ?? throw new RuntimeException('Remote Actor not found for uri ' . $remoteActorId);
         $localObject = $this->localObjectEntityResolver->resolve($localObjectId)
-            ?? throw new RuntimeException('Local object not found');
+            ?? throw new RuntimeException('Local object not found for uri ' . $localObjectId);
         $share = new Interaction($uri, $type, $actor, $localObject, Direction::INCOMING);
         $this->shareRepository->create($share);
     }
