@@ -30,6 +30,9 @@ class StoredActor extends StoredObject
         #[ORM\Column(type: UriType::NAME, nullable: true)]
         public ?Uri $inbox = null,
 
+        #[ORM\Column(type: UriType::NAME, nullable: true)]
+        public ?Uri $sharedInbox = null,
+
         #[ORM\Column(type: Types::STRING, length: 512, nullable: true)]
         public ?string $publicKey = null,
 

@@ -45,6 +45,7 @@ class DatabaseActorService implements ObjectProviderInterface, DatabaseObjectPer
             name: $actor->name,
             summary: $actor->summary,
             inbox: $actor->inbox,
+            sharedInbox: $actor->endpoints['sharedInbox'] ?? null,
             publicKey: $actor->publicKey?->publicKeyPem
         );
         $this->actorRepository->create($dbActor);
