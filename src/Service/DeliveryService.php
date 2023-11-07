@@ -12,6 +12,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Service\Delivery\DeliveryServiceInter
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\PendingDelivery;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\PendingDeliveryRepository;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class DeliveryService implements DeliveryServiceInterface
@@ -21,7 +22,8 @@ class DeliveryService implements DeliveryServiceInterface
         private readonly LocalActorServiceInterface $localActorService,
         private readonly ActivityPubClientInterface $activityPubClient,
         private readonly SerializerInterface $serializer,
-        private bool $throwExceptions = false
+        private readonly LoggerInterface $logger,
+        public bool $deliverNewMessagesImmediately = false, // TODO: Make configurable (default false)
     ) {
     }
 
@@ -30,22 +32,15 @@ class DeliveryService implements DeliveryServiceInterface
      */
     public function send(LocalActorInterface $localActor, Uri $recipientInbox, CoreType $payload): void
     {
-        $signKey = $this->localActorService->getSignKey($localActor);
+        $pendingDelivery = new PendingDelivery(
+            $localActor,
+            $recipientInbox,
+            $this->serializer->serialize($payload, ActivityStreamEncoder::FORMAT)
+        );
+        $this->pendingDeliveryRepository->create($pendingDelivery);
 
-        //TODO: Not send straight away, but queue and send in background
-        try {
-            $this->activityPubClient->request('POST', $recipientInbox, $payload, $signKey);
-        } catch (Exception $e) {
-            if ($this->throwExceptions) {
-                throw $e;
-            }
-
-            $pendingDelivery = new PendingDelivery(
-                $localActor,
-                $recipientInbox,
-                $this->serializer->serialize($payload, ActivityStreamEncoder::FORMAT)
-            );
-            $this->pendingDeliveryRepository->create($pendingDelivery);
+        if ($this->deliverNewMessagesImmediately) {
+            $this->sendPendingDelivery($pendingDelivery);
         }
     }
 
@@ -56,23 +51,33 @@ class DeliveryService implements DeliveryServiceInterface
     {
         $pendingDeliveries = $this->pendingDeliveryRepository->findBy([], ['nextDelivery' => 'asc'], $limit);
         foreach ($pendingDeliveries as $pendingDelivery) {
-            try {
-                $this->activityPubClient->request(
-                    'POST',
-                    $pendingDelivery->recipientInbox,
-                    $pendingDelivery->payload,
-                    $this->localActorService->getSignKey($pendingDelivery->localActor)
-                );
-                $this->pendingDeliveryRepository->delete($pendingDelivery);
-            } catch (Exception $e) {
-                $pendingDelivery->scheduleNextDelivery();
-                $this->pendingDeliveryRepository->update($pendingDelivery);
-            }
+            $this->sendPendingDelivery($pendingDelivery);
         }
     }
 
-    public function setThrowExceptions(bool $throwExceptions): void
+    private function sendPendingDelivery(PendingDelivery $pendingDelivery): void
     {
-        $this->throwExceptions = $throwExceptions;
+        try {
+            $this->logger->debug('Sending ActivityPub message', [
+                'inbox' => $pendingDelivery->recipientInbox,
+                'payload' => $pendingDelivery->payload
+            ]);
+            $this->activityPubClient->request(
+                'POST',
+                $pendingDelivery->recipientInbox,
+                $pendingDelivery->payload,
+                $this->localActorService->getSignKey($pendingDelivery->localActor)
+            );
+            $this->pendingDeliveryRepository->delete($pendingDelivery);
+        } catch (Exception $e) {
+            $this->logger->error('Error sending ActivityPub message', [
+                'inbox' => $pendingDelivery->recipientInbox,
+                'payload' => $pendingDelivery->payload,
+                'exception' => $e
+            ]);
+            $pendingDelivery->setLastError($e->getMessage());
+            $pendingDelivery->scheduleNextDelivery();
+            $this->pendingDeliveryRepository->update($pendingDelivery);
+        }
     }
 }

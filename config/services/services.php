@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Config\Services;
 
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Container\TagName as CoreTagName;
+use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\LocalActorServiceInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\PublicKeyResolverInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Client\ActivityPubClientInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Delivery\DeliveryServiceInterface;
@@ -14,6 +15,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Service\Share\InteractionServiceInter
 use Dontdrinkandroot\ActivityPubOrmBundle\Event\Listener\StoredObjectUpdatedListener;
 use Dontdrinkandroot\ActivityPubOrmBundle\Model\Container\TagName;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ObjectContentRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\PendingDeliveryRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredActorRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredObjectRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Actor\DatabaseActorService;
@@ -56,6 +58,17 @@ return function (ContainerConfigurator $configurator): void {
         ]);
     $services->alias(PublicKeyResolverInterface::class, StoredObjectPublicKeyResolver::class);
 
+    $services->set(DeliveryService::class)
+        ->args([
+            service(PendingDeliveryRepository::class),
+            service(LocalActorServiceInterface::class),
+            service(ActivityPubClientInterface::class),
+            service(SerializerInterface::class),
+            service('logger'),
+        ])
+        ->tag('mono_logger.logger', ['channel' => 'activitypub']);
+    $services->alias(DeliveryServiceInterface::class, DeliveryService::class);
+
     $services->set(DatabaseActorService::class)
         ->args([
             service(StoredActorRepository::class),
@@ -96,7 +109,6 @@ return function (ContainerConfigurator $configurator): void {
 
     $services->alias(LocalObjectEntityResolverInterface::class, LocalObjectEntityResolver::class);
     $services->alias(FollowStorageInterface::class, FollowStorage::class);
-    $services->alias(DeliveryServiceInterface::class, DeliveryService::class);
     $services->alias(InteractionServiceInterface::class, InteractionService::class);
     $services->alias(FollowServiceInterface::class, FollowService::class);
 };

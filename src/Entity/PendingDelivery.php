@@ -22,6 +22,9 @@ class PendingDelivery
     #[ORM\Column(type: Types::INTEGER)]
     public int $deliveryAttempts = 0;
 
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $lastError = null;
+
     public function __construct(
         #[ORM\ManyToOne(targetEntity: LocalActorInterface::class)]
         #[ORM\JoinColumn(nullable: false)]
@@ -45,5 +48,10 @@ class PendingDelivery
             )
         );
         $this->deliveryAttempts++;
+    }
+
+    public function setLastError(?string $lastError): void
+    {
+        $this->lastError = substr($lastError, 0, 255);
     }
 }
