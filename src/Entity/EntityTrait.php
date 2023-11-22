@@ -9,7 +9,7 @@ use RuntimeException;
 trait EntityTrait
 {
     #[ORM\Id]
-    #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\Column(type: Types::BIGINT)]
     #[ORM\GeneratedValue]
     private ?int $id = null;
 
