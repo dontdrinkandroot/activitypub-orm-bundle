@@ -24,6 +24,7 @@ class DeliveryService implements DeliveryServiceInterface
         private readonly SerializerInterface $serializer,
         private readonly LoggerInterface $logger,
         public bool $deliverNewMessagesImmediately = false, // TODO: Make configurable (default false)
+        private readonly int $discardAfterDeliveryAttempts = 10 // TODO: Make configurable (default 10)
     ) {
     }
 
@@ -58,7 +59,8 @@ class DeliveryService implements DeliveryServiceInterface
     private function sendPendingDelivery(PendingDelivery $pendingDelivery): void
     {
         $exception = null;
-        $deliveryAttemps = $pendingDelivery->deliveryAttempts;
+        $deliveryAttempts = $pendingDelivery->deliveryAttempts;
+        $discarded = false;
         try {
 
             $this->activityPubClient->request(
@@ -71,15 +73,21 @@ class DeliveryService implements DeliveryServiceInterface
         } catch (Exception $e) {
             $exception = $e;
             $pendingDelivery->setLastError($e->getMessage());
-            $pendingDelivery->scheduleNextDelivery();
-            $this->pendingDeliveryRepository->update($pendingDelivery);
+            if ($deliveryAttempts >= $this->discardAfterDeliveryAttempts - 1) {
+                $this->pendingDeliveryRepository->delete($pendingDelivery);
+                $discarded = true;
+            } else {
+                $pendingDelivery->scheduleNextDelivery();
+                $this->pendingDeliveryRepository->update($pendingDelivery);
+            }
         }
 
         $this->logger->debug('Sent ActivityPub message', [
             'inbox' => $pendingDelivery->recipientInbox,
-            'deliveryAttempts' => $deliveryAttemps,
+            'deliveryAttempts' => $deliveryAttempts,
             'payload' => $pendingDelivery->payload,
-            'exception' => $exception
+            'exception' => $exception,
+            'discarded' => $discarded
         ]);
     }
 }
