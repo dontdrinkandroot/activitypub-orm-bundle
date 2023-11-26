@@ -50,7 +50,7 @@ class PendingDelivery
         $this->deliveryAttempts++;
     }
 
-    public function setLastError(?string $lastError): void
+    public function setLastError(string $lastError): void
     {
         $this->lastError = substr($lastError, 0, 255);
     }
