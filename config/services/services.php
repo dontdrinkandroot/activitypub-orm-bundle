@@ -66,7 +66,7 @@ return function (ContainerConfigurator $configurator): void {
             service(SerializerInterface::class),
             service('logger'),
         ])
-        ->tag('mono_logger.logger', ['channel' => 'activitypub']);
+        ->tag(TagName::MONOLOG_LOGGER, ['channel' => 'activitypub_delivery']);
     $services->alias(DeliveryServiceInterface::class, DeliveryService::class);
 
     $services->set(DatabaseActorService::class)

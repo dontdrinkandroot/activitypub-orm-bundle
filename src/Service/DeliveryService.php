@@ -57,11 +57,10 @@ class DeliveryService implements DeliveryServiceInterface
 
     private function sendPendingDelivery(PendingDelivery $pendingDelivery): void
     {
+        $exception = null;
+        $deliveryAttemps = $pendingDelivery->deliveryAttempts;
         try {
-            $this->logger->debug('Sending ActivityPub message', [
-                'inbox' => $pendingDelivery->recipientInbox,
-                'payload' => $pendingDelivery->payload
-            ]);
+
             $this->activityPubClient->request(
                 'POST',
                 $pendingDelivery->recipientInbox,
@@ -70,14 +69,17 @@ class DeliveryService implements DeliveryServiceInterface
             );
             $this->pendingDeliveryRepository->delete($pendingDelivery);
         } catch (Exception $e) {
-            $this->logger->error('Error sending ActivityPub message', [
-                'inbox' => $pendingDelivery->recipientInbox,
-                'payload' => $pendingDelivery->payload,
-                'exception' => $e
-            ]);
+            $exception = $e;
             $pendingDelivery->setLastError($e->getMessage());
             $pendingDelivery->scheduleNextDelivery();
             $this->pendingDeliveryRepository->update($pendingDelivery);
         }
+
+        $this->logger->debug('Sent ActivityPub message', [
+            'inbox' => $pendingDelivery->recipientInbox,
+            'deliveryAttempts' => $deliveryAttemps,
+            'payload' => $pendingDelivery->payload,
+            'exception' => $exception
+        ]);
     }
 }
