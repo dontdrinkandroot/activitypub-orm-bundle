@@ -15,12 +15,10 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\LocalActorUriGeneratorI
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalActor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Repository\LocalActorRepository;
 use Dontdrinkandroot\Common\Asserted;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class LocalActorService implements LocalActorServiceInterface
 {
     public function __construct(
-        private readonly UrlGeneratorInterface $urlGenerator,
         private readonly TypeClassRegistry $typeClassRegistry,
         private readonly LocalActorUriGeneratorInterface $localActorUriGenerator,
         private readonly LocalActorRepository $localActorRepository
