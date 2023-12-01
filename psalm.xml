@@ -22,4 +22,7 @@
         </PropertyNotSetInConstructor>
     </issueHandlers>
 
+    <plugins>
+        <plugin filename="./vendor/dontdrinkandroot/common/src/Psalm/CommonPlugin.php"/>
+    </plugins>
 </psalm>

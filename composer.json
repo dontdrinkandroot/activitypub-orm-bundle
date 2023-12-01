@@ -35,29 +35,29 @@
         }
     },
     "require": {
-        "php": ">=8.1",
-        "doctrine/doctrine-bundle": "^2.10",
-        "doctrine/orm": "^2.16",
+        "php": ">=8.2",
+        "doctrine/doctrine-bundle": "^2.11",
+        "doctrine/orm": "^2.17",
         "dontdrinkandroot/activitypub-core-bundle": "^0.1.x-dev",
-        "symfony/config": "^5.4",
-        "symfony/dependency-injection": "^5.4",
-        "symfony/framework-bundle": "^5.4",
-        "symfony/http-kernel": "^5.4",
-        "symfony/uid": "^5.4"
+        "symfony/config": "^6.4",
+        "symfony/dependency-injection": "^6.4",
+        "symfony/framework-bundle": "^6.4",
+        "symfony/http-kernel": "^6.4",
+        "symfony/uid": "^6.4"
     },
     "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^3.4",
-        "liip/test-fixtures-bundle": "^2.6",
-        "phpunit/phpunit": "^9.5",
-        "symfony/browser-kit": "^5.4",
-        "symfony/phpunit-bridge": "^5.4"
+        "doctrine/doctrine-fixtures-bundle": "^3.5",
+        "liip/test-fixtures-bundle": "^2.7",
+        "phpunit/phpunit": "^9.6",
+        "symfony/browser-kit": "^6.4",
+        "symfony/phpunit-bridge": "^6.4"
     },
     "config": {
         "sort-packages": true
     },
     "extra": {
         "symfony": {
-            "require": "5.4.*",
+            "require": "6.4.*",
             "allow-contrib": true
         },
         "branch-alias": {
