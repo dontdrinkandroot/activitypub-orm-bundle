@@ -25,6 +25,7 @@ use Dontdrinkandroot\ActivityPubOrmBundle\Service\Follow\FollowStorage;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\InteractionService;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityResolver;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityResolverInterface;
+use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\GenericDatabaseObjectPersister;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\GenericDatabaseObjectProvider;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\ObjectContentStorage;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\ObjectContentStorageInterface;
@@ -85,11 +86,15 @@ return function (ContainerConfigurator $configurator): void {
     $services->set(GenericDatabaseObjectProvider::class)
         ->args([
             service(ActivityPubClientInterface::class),
-            service(StoredObjectRepository::class),
-            service(ObjectContentStorageInterface::class),
             tagged_iterator(TagName::DATABASE_OBJECT_PERSISTER)
         ])
-        ->tag(CoreTagName::OBJECT_PROVIDER, ['priority' => -128])
+        ->tag(CoreTagName::OBJECT_PROVIDER, ['priority' => -128]);
+
+    $services->set(GenericDatabaseObjectPersister::class)
+        ->args([
+            service(StoredObjectRepository::class),
+            service(ObjectContentStorageInterface::class)
+        ])
         ->tag(TagName::DATABASE_OBJECT_PERSISTER, ['priority' => -256]);
 
     $services->set(ObjectContentStorage::class)
