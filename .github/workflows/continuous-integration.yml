@@ -6,13 +6,10 @@ jobs:
     phpunit-and-psalm:
         uses: dontdrinkandroot/github-actions/.github/workflows/php-symfony-bundle.yml@main
         secrets: inherit
-        with:
-            php-version: '8.2'
-            symfony-version: '5.4.*'
 
-#    sonarcloud:
-#        uses: dontdrinkandroot/github-actions/.github/workflows/php-sonarcloud.yml@main
-#        needs: phpunit-and-psalm
-#        with:
-#            project-key: 'dontdrinkandroot_bridge-bundle.php'
-#        secrets: inherit
+    sonarcloud:
+        uses: dontdrinkandroot/github-actions/.github/workflows/php-sonarcloud.yml@main
+        needs: phpunit-and-psalm
+        with:
+            project-key: 'dontdrinkandroot_activitypub-orm-bundle.php'
+        secrets: inherit
