@@ -28,6 +28,8 @@ class DeleteTest extends WebTestCase
             publicKeyPem: $keyPair->publicKey
         );
 
+        // TODO: Replace once listener is implemented
+        $this->expectExceptionCode(501);
         $activityPubClient->request(
             method: 'POST',
             uri: Uri::fromString('http://localhost/inbox'),

@@ -53,12 +53,6 @@ return function (ContainerConfigurator $configurator): void {
             tagged_iterator(TagName::LOCAL_OBJECT_PROVIDER)
         ]);
 
-    $services->set(StoredObjectPublicKeyResolver::class)
-        ->args([
-            service(StoredObjectResolverInterface::class)
-        ]);
-    $services->alias(PublicKeyResolverInterface::class, StoredObjectPublicKeyResolver::class);
-
     $services->set(DeliveryService::class)
         ->args([
             service(PendingDeliveryRepository::class),
