@@ -11,6 +11,7 @@ use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredActorRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\DatabaseObjectPersisterInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\ObjectContentStorage;
 use Dontdrinkandroot\Common\Asserted;
+use Override;
 
 class DatabaseActorService implements ObjectProviderInterface, DatabaseObjectPersisterInterface
 {
@@ -20,16 +21,13 @@ class DatabaseActorService implements ObjectProviderInterface, DatabaseObjectPer
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provide(Uri $uri, ?SignKey $signKey = null): Actor|false
     {
         return $this->objectContentStorage->find($uri, Actor::class) ?? false;
     }
-    /**
-     * {@inheritdoc}
-     */
+
+    #[Override]
     public function persist(object $object): bool
     {
         if (!$object instanceof Actor) {

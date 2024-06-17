@@ -15,6 +15,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\LocalActorUriGeneratorI
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalActor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Repository\LocalActorRepository;
 use Dontdrinkandroot\Common\Asserted;
+use Override;
 
 class LocalActorService implements LocalActorServiceInterface
 {
@@ -25,14 +26,13 @@ class LocalActorService implements LocalActorServiceInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function findLocalActorByUsername(string $username): ?LocalActor
     {
         return $this->localActorRepository->findOneByUsername($username);
     }
 
+    #[Override]
     public function findLocalActorByUri(Uri $uri): ?LocalActorInterface
     {
         $username = $this->localActorUriGenerator->matchUsername($uri);
@@ -43,9 +43,7 @@ class LocalActorService implements LocalActorServiceInterface
         return $this->findLocalActorByUsername($username);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function getSignKey(LocalActorInterface $localActor): SignKey
     {
         Asserted::instanceOf($localActor, LocalActor::class);
@@ -58,9 +56,6 @@ class LocalActorService implements LocalActorServiceInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function toActivityPubActor(LocalActorInterface $localActor): Actor
     {
         Asserted::instanceOf($localActor, LocalActor::class);
@@ -78,9 +73,7 @@ class LocalActorService implements LocalActorServiceInterface
         return $actor;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provide(Uri $uri, ?SignKey $signKey): Actor|false|null
     {
         $username = $this->localActorUriGenerator->matchUsername($uri);

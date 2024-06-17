@@ -11,6 +11,7 @@ use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Follow;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\FollowRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\StoredObjectResolverInterface;
+use Override;
 use RuntimeException;
 
 class FollowStorage implements FollowStorageInterface
@@ -21,9 +22,7 @@ class FollowStorage implements FollowStorageInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function add(LocalActorInterface $localActor, Uri $remoteActorId, Direction $direction): void
     {
         $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
@@ -37,9 +36,7 @@ class FollowStorage implements FollowStorageInterface
         $this->repository->create($follow);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function accept(LocalActorInterface $localActor, Uri $remoteActorId, Direction $direction): void
     {
         $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
@@ -53,9 +50,7 @@ class FollowStorage implements FollowStorageInterface
         $this->repository->update($follow);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function reject(LocalActorInterface $localActor, Uri $remoteActorId, Direction $direction): void
     {
         $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
@@ -68,9 +63,7 @@ class FollowStorage implements FollowStorageInterface
         $this->repository->delete($follow);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function remove(LocalActorInterface $localActor, Uri $remoteActorId, Direction $direction): void
     {
         $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
@@ -81,9 +74,7 @@ class FollowStorage implements FollowStorageInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function findState(LocalActorInterface $localActor, Uri $remoteActorId, Direction $direction): ?FollowState
     {
         $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
@@ -96,9 +87,7 @@ class FollowStorage implements FollowStorageInterface
         return $follow->state;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function list(
         LocalActorInterface $localActor,
         Direction $direction,
@@ -109,14 +98,13 @@ class FollowStorage implements FollowStorageInterface
         $follows = $this->repository->findAllByLocalActor($localActor, $direction, $followState, $offset, $limit);
 
         return array_map(
-            fn(Follow $follower) => $follower->remoteActor->uri,
+            fn(Follow $follower
+            ): Uri => $follower->remoteActor->uri,
             $follows
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function count(
         LocalActorInterface $localActor,
         Direction $direction,

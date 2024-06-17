@@ -9,30 +9,27 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalActor\Person;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalActor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalNote;
+use Override;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Uid\Uuid;
 
 class PersonNote1 extends Fixture implements DependentFixtureInterface
 {
-    public const UUID = 'a971cbac-fb77-4192-821f-cc08b706c86e';
-    public const URI = 'http://localhost/notes/a971cbac-fb77-4192-821f-cc08b706c86e';
+    public const string UUID = 'a971cbac-fb77-4192-821f-cc08b706c86e';
+    public const string URI = 'http://localhost/notes/a971cbac-fb77-4192-821f-cc08b706c86e';
 
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function getDependencies(): array
     {
         return [Person::class];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function load(ObjectManager $manager): void
     {
         $localActor = $this->getReference(Person::class, LocalActor::class);

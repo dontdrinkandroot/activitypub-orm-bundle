@@ -12,6 +12,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Service\Object\ObjectProviderInterfac
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityProviderInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalNote;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Repository\LocalNoteRepository;
+use Override;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Uid\Uuid;
@@ -25,18 +26,14 @@ class LocalNoteService implements ObjectProviderInterface, LocalObjectEntityProv
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provideEntity(Uri $uri): LocalNote|false|null
     {
         $uuid = $this->findUuid($uri);
         return (null === $uuid) ? false : $this->localNoteRepository->findOneByUuid($uuid);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provide(Uri $uri, ?SignKey $signKey): CoreObject|false|null
     {
         $uuid = $this->findUuid($uri);

@@ -6,30 +6,25 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\Deprecations\Deprecation;
+use Override;
 
 class PlainJsonType extends Type
 {
-    public const NAME = 'plain_json';
+    public const string NAME = 'plain_json';
 
-    /**
-     * {@inheritDoc}
-     */
+    #[Override]
     public function getName(): string
     {
         return self::NAME;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getJsonTypeDeclarationSQL($column);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): ?string
     {
         if ($value === null || $value === '') {
@@ -47,10 +42,9 @@ class PlainJsonType extends Type
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @deprecated
      */
+    #[Override]
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         Deprecation::triggerIfCalledFromOutside(

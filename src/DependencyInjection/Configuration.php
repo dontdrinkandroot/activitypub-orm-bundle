@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\ActivityPubOrmBundle\DependencyInjection;
 
 use Dontdrinkandroot\Common\Asserted;
+use Override;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -10,9 +11,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('ddr_activity_pub_orm');

@@ -11,6 +11,7 @@ use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredObject;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ObjectContentRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredObjectRepository;
 use Dontdrinkandroot\Common\Asserted;
+use Override;
 use RuntimeException;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -23,9 +24,7 @@ class ObjectContentStorage implements ObjectContentStorageInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function store(Uri|StoredObject $object, CoreObject|string $content): void
     {
         $uri = $object instanceof StoredObject ? $object->uri : $object;
@@ -53,9 +52,7 @@ class ObjectContentStorage implements ObjectContentStorageInterface
         $this->objectContentRepository->create($objectContent);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function find(Uri $uri, string $type = CoreObject::class): ?CoreObject
     {
         $content = $this->findContent($uri);
@@ -67,33 +64,25 @@ class ObjectContentStorage implements ObjectContentStorageInterface
         return Asserted::instanceOf($object, $type);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function findContent(Uri $uri): ?string
     {
         return $this->objectContentRepository->findOneByUri($uri)?->content;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function fetch(Uri $uri, string $type = CoreObject::class): CoreObject
     {
         return $this->find($uri, $type) ?? throw new RuntimeException('Object not found');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function fetchContent(Uri $uri): string
     {
         return $this->findContent($uri) ?? throw new RuntimeException('Object not found');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function delete(Uri $uri): void
     {
         $objectContent = $this->objectContentRepository->findOneByUri($uri);

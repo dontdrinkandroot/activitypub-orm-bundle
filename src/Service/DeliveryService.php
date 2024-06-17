@@ -12,6 +12,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Service\Delivery\DeliveryServiceInter
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\PendingDelivery;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\PendingDeliveryRepository;
 use Exception;
+use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -28,9 +29,7 @@ class DeliveryService implements DeliveryServiceInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function send(LocalActorInterface $localActor, Uri $recipientInbox, CoreType $payload): void
     {
         $pendingDelivery = new PendingDelivery(
@@ -45,9 +44,7 @@ class DeliveryService implements DeliveryServiceInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function sendQueued(?int $limit = null): void
     {
         $pendingDeliveries = $this->pendingDeliveryRepository->findBy([], ['nextDelivery' => 'asc'], $limit);

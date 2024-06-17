@@ -10,6 +10,7 @@ use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\InteractionRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityResolverInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\StoredObjectResolverInterface;
+use Override;
 use RuntimeException;
 
 class InteractionService implements InteractionServiceInterface
@@ -21,9 +22,7 @@ class InteractionService implements InteractionServiceInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function incoming(Uri $uri, string $type, Uri $remoteActorId, Uri $localObjectId): void
     {
         $actor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)

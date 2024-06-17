@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Service\HttpClient;
 
+use Override;
 use RuntimeException;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\Exception\RedirectionException;
@@ -24,20 +25,18 @@ class KernelBrowserResponse implements ResponseInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function getStatusCode(): int
     {
         return $this->statusCode;
     }
 
     /**
-     * {@inheritdoc}
      * @throws RedirectionExceptionInterface On a 3xx when $throw is true and the "max_redirects" option has been reached
      * @throws ClientExceptionInterface      On a 4xx when $throw is true
      * @throws ServerExceptionInterface      On a 5xx when $throw is true
      */
+    #[Override]
     public function getHeaders(bool $throw = true): array
     {
         if ($throw) {
@@ -47,9 +46,7 @@ class KernelBrowserResponse implements ResponseInterface
         return $this->headers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function getContent(bool $throw = true): string
     {
         if ($throw) {
@@ -59,32 +56,26 @@ class KernelBrowserResponse implements ResponseInterface
         return $this->content;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function toArray(bool $throw = true): array
     {
         throw new RuntimeException('Not implemented');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function cancel(): void
     {
         throw new RuntimeException('Not implemented');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function getInfo(string $type = null): mixed
     {
         return match ($type) {
             'url' => $this->url,
             'http_code' => $this->statusCode,
             'response_headers' => array_map(
-                fn($name, $values) => sprintf('%s: %s', $name, implode(', ', $values)),
+                fn($name, $values): string => sprintf('%s: %s', $name, implode(', ', $values)),
                 array_keys($this->headers),
                 $this->headers
             ),
@@ -93,9 +84,6 @@ class KernelBrowserResponse implements ResponseInterface
         };
     }
 
-    /**
-     * @return void
-     */
     public function throw(): void
     {
         match (true) {

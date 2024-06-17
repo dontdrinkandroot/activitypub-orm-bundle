@@ -7,6 +7,7 @@ use Doctrine\Persistence\ObjectManager;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\LocalActorUriGeneratorInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalActor;
 use Dontdrinkandroot\Common\Asserted;
+use Override;
 
 abstract class AbstractLocalActorFixture extends Fixture
 {
@@ -15,9 +16,7 @@ abstract class AbstractLocalActorFixture extends Fixture
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function load(ObjectManager $manager): void
     {
         $username = $this->getUsername();
@@ -39,14 +38,8 @@ abstract class AbstractLocalActorFixture extends Fixture
         $this->addReference(static::class, $localActor);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     abstract protected function getPrivateKeyPem(): string;
 
-    /**
-     * {@inheritdoc}
-     */
     abstract protected function getPublicKeyPem(): string;
 
     abstract protected function getUsername(): string;

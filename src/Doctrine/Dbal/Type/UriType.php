@@ -7,30 +7,25 @@ use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\Deprecations\Deprecation;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
+use Override;
 
 class UriType extends Type
 {
-    public const NAME = 'uri';
+    public const string NAME = 'uri';
 
-    /**
-     * {@inheritDoc}
-     */
+    #[Override]
     public function getName(): string
     {
         return self::NAME;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return $platform->getStringTypeDeclarationSQL($column);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
         if (null === $value) {
@@ -44,9 +39,7 @@ class UriType extends Type
         return $value->__toString();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): ?Uri
     {
         if (null === $value) {
@@ -61,10 +54,9 @@ class UriType extends Type
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @deprecated
      */
+    #[Override]
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         Deprecation::triggerIfCalledFromOutside(

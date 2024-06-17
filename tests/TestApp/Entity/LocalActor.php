@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
+use Override;
 use RuntimeException;
 use Stringable;
 
@@ -37,17 +38,13 @@ class LocalActor extends StoredActor implements LocalActorInterface, Stringable
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function getUsername(): string
     {
         return $this->preferredUsername ?? throw new RuntimeException('No username set');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function __toString(): string
     {
         return sprintf(

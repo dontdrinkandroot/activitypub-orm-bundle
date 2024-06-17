@@ -7,6 +7,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Core\CoreObject;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Client\ActivityPubClientInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Object\ObjectProviderInterface;
+use Override;
 use RuntimeException;
 
 class GenericDatabaseObjectProvider implements ObjectProviderInterface
@@ -20,9 +21,7 @@ class GenericDatabaseObjectProvider implements ObjectProviderInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provide(Uri $uri, ?SignKey $signKey): CoreObject|false|null
     {
         $activityPubObject = $this->client->request(method: 'GET', uri: $uri, signKey: $signKey);

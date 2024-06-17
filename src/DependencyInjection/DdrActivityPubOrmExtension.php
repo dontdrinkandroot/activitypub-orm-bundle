@@ -8,6 +8,7 @@ use Dontdrinkandroot\ActivityPubOrmBundle\Model\Container\TagName;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityProviderInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\DatabaseObjectPersisterInterface;
 use InvalidArgumentException;
+use Override;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -16,9 +17,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class DdrActivityPubOrmExtension extends Extension implements PrependExtensionInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
@@ -36,9 +35,7 @@ class DdrActivityPubOrmExtension extends Extension implements PrependExtensionIn
             ->addTag(TagName::DATABASE_OBJECT_PERSISTER);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function prepend(ContainerBuilder $container): void
     {
         $configs = $container->getExtensionConfig($this->getAlias());

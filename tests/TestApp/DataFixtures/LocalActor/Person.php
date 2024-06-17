@@ -3,30 +3,25 @@
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalActor;
 
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Actor\ActorType;
+use Override;
 
 class Person extends AbstractLocalActorFixture
 {
-    public const USERNAME = 'person';
+    public const string USERNAME = 'person';
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     protected function getUsername(): string
     {
         return self::USERNAME;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     protected function getType(): string
     {
         return ActorType::PERSON->value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     protected function getPrivateKeyPem(): string
     {
         return <<<PEM
@@ -60,9 +55,7 @@ krjA/89F2dBnRAfRVN7/Y67WxpQIgG9GxZDsm2chMpznXk8PYBxM
 PEM;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     protected function getPublicKeyPem(): string
     {
         return <<<PEM
