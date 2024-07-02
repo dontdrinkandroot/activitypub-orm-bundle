@@ -2,7 +2,7 @@
 
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Entity;
 
-use DateTimeImmutable;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,20 +28,20 @@ class PendingDelivery
     public function __construct(
         #[ORM\ManyToOne(targetEntity: LocalActorInterface::class)]
         #[ORM\JoinColumn(nullable: false)]
-        public /* readonly */ LocalActorInterface $localActor,
+        public readonly LocalActorInterface $localActor,
 
         #[ORM\Column(type: UriType::NAME, length: 255)]
-        public /* readonly */ Uri $recipientInbox,
+        public readonly Uri $recipientInbox,
 
         #[ORM\Column(type: PlainJsonType::NAME)]
-        public /* readonly */ string $payload
+        public readonly string $payload
     ) {
-        $this->nextDelivery = new DateTimeImmutable();
+        $this->nextDelivery = new DateTime();
     }
 
     public function scheduleNextDelivery(): void
     {
-        $this->nextDelivery = new DateTimeImmutable(
+        $this->nextDelivery = new DateTime(
             sprintf(
                 '+%d seconds',
                 2 ** ($this->deliveryAttempts + 4)
