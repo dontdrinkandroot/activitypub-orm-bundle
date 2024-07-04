@@ -20,10 +20,10 @@ class StoredObject
 
     public function __construct(
         #[ORM\Column(type: UriType::NAME, unique: true)]
-        public /* readonly */ Uri $uri,
+        public readonly Uri $uri,
 
         #[ORM\Column(type: Types::STRING)]
-        public /* readonly */ string $type,
+        public readonly string $type,
     ) {
     }
 

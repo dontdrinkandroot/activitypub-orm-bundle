@@ -6,10 +6,10 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\SignKey;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Actor\Actor;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Actor\ActorType;
-use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\JsonLdContext;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\PublicKey;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Serializer\TypeClassRegistry;
+use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\LocalActorPopulator;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\LocalActorServiceInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\LocalActorUriGeneratorInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalActor;
@@ -20,6 +20,7 @@ use Override;
 class LocalActorService implements LocalActorServiceInterface
 {
     public function __construct(
+        private readonly LocalActorPopulator $localActorPopulator,
         private readonly TypeClassRegistry $typeClassRegistry,
         private readonly LocalActorUriGeneratorInterface $localActorUriGenerator,
         private readonly LocalActorRepository $localActorRepository
@@ -59,14 +60,10 @@ class LocalActorService implements LocalActorServiceInterface
     public function toActivityPubActor(LocalActorInterface $localActor): Actor
     {
         Asserted::instanceOf($localActor, LocalActor::class);
-        $actor = $this->typeClassRegistry->actorFromType(ActorType::from($localActor->type));
-        $actor->jsonLdContext = new JsonLdContext(['https://w3id.org/security/v1']);
-        $actor->id = $this->localActorUriGenerator->generateId($localActor->getUsername());
-        $actor->inbox = $this->localActorUriGenerator->generateInbox($localActor->getUsername());
-        $actor->preferredUsername = $localActor->getUsername();
+        $actor = $this->localActorPopulator->populate($localActor, ActorType::from($localActor->type));
         $actor->publicKey = new PublicKey(
             id: $actor->getId()->withFragment('main-key'),
-            owner: $actor->id,
+            owner: Asserted::notNull($actor->id),
             publicKeyPem: Asserted::notNull($localActor->publicKey)
         );
 

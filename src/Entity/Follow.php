@@ -17,19 +17,19 @@ class Follow
     public function __construct(
         #[ORM\ManyToOne(targetEntity: LocalActorInterface::class)]
         #[ORM\JoinColumn(name: 'local_actor_id', nullable: false)]
-        public /* readonly */ LocalActorInterface $localActor,
+        public readonly LocalActorInterface $localActor,
 
         #[ORM\ManyToOne(targetEntity: StoredActor::class)]
         #[ORM\JoinColumn(name: 'remote_actor_id', nullable: false)]
-        public /* readonly */ StoredActor $remoteActor,
+        public readonly StoredActor $remoteActor,
 
         // TODO: Would love to use boolean but hydration fails
         #[ORM\Column(name: 'direction', type: Types::SMALLINT, enumType: Direction::class)]
-        public /* readonly */ Direction $direction,
+        public readonly Direction $direction,
 
         // TODO: Would love to use boolean but hydration fails
         #[ORM\Column(name: 'accepted', type: Types::SMALLINT, enumType: FollowState::class)]
-        public /* readonly */ FollowState $state = FollowState::PENDING
+        public FollowState $state = FollowState::PENDING
     ) {
     }
 }

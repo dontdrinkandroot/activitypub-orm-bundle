@@ -1,6 +1,6 @@
 <?php
 
-namespace Dontdrinkandroot\ActivityPubOrmBundle\Model\Container;
+namespace Dontdrinkandroot\ActivityPubOrmBundle\Config\Container;
 
 class TagName
 {

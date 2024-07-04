@@ -47,7 +47,13 @@ class ActorActionTest extends WebTestCase
                 'id' => 'https://localhost/@person#main-key',
                 'owner' => 'https://localhost/@person'
             ],
-            'type' => 'Person'
+            'type' => 'Person',
+            'outbox' => 'https://localhost/@person/outbox',
+            'following' => 'https://localhost/@person/following',
+            'followers' => 'https://localhost/@person/followers',
+            'endpoints' => [
+                'sharedInbox' => 'https://localhost/inbox'
+            ]
         ], $data);
     }
 }

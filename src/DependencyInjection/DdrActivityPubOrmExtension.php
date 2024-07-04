@@ -3,8 +3,8 @@
 namespace Dontdrinkandroot\ActivityPubOrmBundle\DependencyInjection;
 
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
-use Dontdrinkandroot\ActivityPubOrmBundle\Model\Container\ParamName;
-use Dontdrinkandroot\ActivityPubOrmBundle\Model\Container\TagName;
+use Dontdrinkandroot\ActivityPubOrmBundle\Config\Container\ParamName;
+use Dontdrinkandroot\ActivityPubOrmBundle\Config\Container\TagName;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityProviderInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\DatabaseObjectPersisterInterface;
 use InvalidArgumentException;

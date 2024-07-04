@@ -2,9 +2,8 @@
 
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Config\Services;
 
-use Dontdrinkandroot\ActivityPubCoreBundle\Model\Container\TagName as CoreTagName;
+use Dontdrinkandroot\ActivityPubCoreBundle\Config\Container\TagName as CoreTagName;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\LocalActorServiceInterface;
-use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\PublicKeyResolverInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Client\ActivityPubClientInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Delivery\DeliveryServiceInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowService;
@@ -12,14 +11,13 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowServiceInterface
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowStorageInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Object\ObjectResolverInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Share\InteractionServiceInterface;
+use Dontdrinkandroot\ActivityPubOrmBundle\Config\Container\TagName;
 use Dontdrinkandroot\ActivityPubOrmBundle\Event\Listener\StoredObjectUpdatedListener;
-use Dontdrinkandroot\ActivityPubOrmBundle\Model\Container\TagName;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ObjectContentRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\PendingDeliveryRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredActorRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredObjectRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Actor\DatabaseActorService;
-use Dontdrinkandroot\ActivityPubOrmBundle\Service\Actor\StoredObjectPublicKeyResolver;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\DeliveryService;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Follow\FollowStorage;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\InteractionService;
