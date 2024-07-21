@@ -69,7 +69,7 @@ return function (ContainerConfigurator $configurator): void {
             service(StoredObjectResolverInterface::class)
         ])
         ->tag(TagName::DATABASE_OBJECT_PERSISTER, ['priority' => -128])
-        ->tag(CoreTagName::OBJECT_PROVIDER, ['priority' => -64]);
+        ->tag(CoreTagName::DDR_ACTIVITY_PUB_OBJECT_PROVIDER, ['priority' => -64]);
 
     $services->set(StoredObjectUpdatedListener::class)
         ->tag('doctrine.event_listener', ['event' => 'prePersist'])
@@ -80,7 +80,7 @@ return function (ContainerConfigurator $configurator): void {
             service(ActivityPubClientInterface::class),
             tagged_iterator(TagName::DATABASE_OBJECT_PERSISTER)
         ])
-        ->tag(CoreTagName::OBJECT_PROVIDER, ['priority' => -128]);
+        ->tag(CoreTagName::DDR_ACTIVITY_PUB_OBJECT_PROVIDER, ['priority' => -128]);
 
     $services->set(GenericDatabaseObjectPersister::class)
         ->args([
