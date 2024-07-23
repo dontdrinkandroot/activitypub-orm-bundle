@@ -10,7 +10,7 @@ trait EntityTrait
 {
     #[ORM\Id]
     #[ORM\Column(type: Types::BIGINT)]
-    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[ORM\GeneratedValue]
     private ?int $id = null;
 
     public function getId(): int

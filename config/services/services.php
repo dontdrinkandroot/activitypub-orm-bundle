@@ -9,10 +9,12 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Service\Delivery\DeliveryServiceInter
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowService;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowServiceInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowStorageInterface;
+use Dontdrinkandroot\ActivityPubCoreBundle\Service\Inbox\InboxServiceInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Object\ObjectResolverInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Share\InteractionServiceInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Config\Container\TagName;
 use Dontdrinkandroot\ActivityPubOrmBundle\Event\Listener\StoredObjectUpdatedListener;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\InboxItemRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ObjectContentRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\PendingDeliveryRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredActorRepository;
@@ -20,6 +22,7 @@ use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredObjectRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Actor\DatabaseActorService;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\DeliveryService;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Follow\FollowStorage;
+use Dontdrinkandroot\ActivityPubOrmBundle\Service\Inbox\DbInboxService;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\InteractionService;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityResolver;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityResolverInterface;
@@ -103,6 +106,13 @@ return function (ContainerConfigurator $configurator): void {
             service(ObjectResolverInterface::class)
         ]);
     $services->alias(StoredObjectResolverInterface::class, StoredObjectResolver::class);
+
+    $services->set(DbInboxService::class)
+        ->args([
+            service(InboxItemRepository::class),
+            service(StoredObjectResolverInterface::class)
+        ]);
+    $services->alias(InboxServiceInterface::class, DbInboxService::class);
 
     $services->alias(LocalObjectEntityResolverInterface::class, LocalObjectEntityResolver::class);
     $services->alias(FollowStorageInterface::class, FollowStorage::class);
