@@ -4,7 +4,7 @@ namespace Dontdrinkandroot\ActivityPubOrmBundle\Service\Object;
 
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Object\ObjectResolverInterface;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredObject;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\CoreObject as DbObject;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredObjectRepository;
 use Dontdrinkandroot\Common\Asserted;
 use Override;
@@ -19,7 +19,7 @@ class StoredObjectResolver implements StoredObjectResolverInterface
     }
 
     #[Override]
-    public function resolve(Uri $uri, string $type = StoredObject::class): ?StoredObject
+    public function resolve(Uri $uri, string $type = DbObject::class): ?DbObject
     {
         $storedObject = $this->storedObjectRepository->findOneByUri($uri);
         if (null !== $storedObject) {

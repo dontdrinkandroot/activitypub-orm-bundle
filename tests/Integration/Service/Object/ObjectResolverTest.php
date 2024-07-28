@@ -9,8 +9,8 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Linkable\LinkableObjectsCo
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Client\ActivityPubClientInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Object\ObjectResolverInterface;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredObject;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Actor as DbActor;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\CoreObject;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredActorRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredObjectRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\FixtureSetDefault;
@@ -82,7 +82,7 @@ class ObjectResolverTest extends WebTestCase
         $storedObjectRepository = self::getService(StoredObjectRepository::class);
         $storedObject = $storedObjectRepository->findOneByUri($uri);
         self::assertNotNull($storedObject);
-        self::assertInstanceOf(StoredObject::class, $storedObject);
+        self::assertInstanceOf(CoreObject::class, $storedObject);
     }
 
     public function testRemoteActor(): void
@@ -110,7 +110,7 @@ class ObjectResolverTest extends WebTestCase
         $actorRepository = self::getService(StoredActorRepository::class);
         $storedActor = $actorRepository->findOneByUri($uri);
         self::assertNotNull($storedActor);
-        self::assertInstanceOf(StoredActor::class, $storedActor);
+        self::assertInstanceOf(DbActor::class, $storedActor);
 
         /* Resolve again to test caching */
         $resolvedActor = $objectResolver->resolve($uri);

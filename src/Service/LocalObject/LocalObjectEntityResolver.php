@@ -3,7 +3,7 @@
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject;
 
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredObject;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\CoreObject;
 use Override;
 
 class LocalObjectEntityResolver implements LocalObjectEntityResolverInterface
@@ -16,7 +16,7 @@ class LocalObjectEntityResolver implements LocalObjectEntityResolverInterface
     }
 
     #[Override]
-    public function resolve(Uri $uri): ?StoredObject
+    public function resolve(Uri $uri): ?CoreObject
     {
         foreach ($this->providers as $provider) {
             $result = $provider->provideEntity($uri);

@@ -18,9 +18,9 @@ class InboxItem
         #[ORM\JoinColumn(name: 'local_actor_id', nullable: false)]
         public readonly LocalActorInterface $localActor,
 
-        #[ORM\ManyToOne(targetEntity: StoredObject::class)]
+        #[ORM\ManyToOne(targetEntity: CoreObject::class)]
         #[ORM\JoinColumn(name: 'activity_id', nullable: false)]
-        public readonly StoredObject $activity,
+        public readonly CoreObject $activity,
 
         #[ORM\Column(type: Types::BIGINT)]
         public int $created

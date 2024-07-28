@@ -9,7 +9,7 @@ use Dontdrinkandroot\ActivityPubOrmBundle\Doctrine\Dbal\Type\UriType;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'actor')]
-class StoredActor extends StoredObject
+class Actor extends CoreObject
 {
     public function __construct(
         Uri $uri,

@@ -6,7 +6,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\Direction;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Share\InteractionServiceInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Interaction;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Actor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\InteractionRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\LocalObject\LocalObjectEntityResolverInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\StoredObjectResolverInterface;
@@ -25,7 +25,7 @@ class InteractionService implements InteractionServiceInterface
     #[Override]
     public function incoming(Uri $uri, string $type, Uri $remoteActorId, Uri $localObjectId): void
     {
-        $actor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
+        $actor = $this->storedObjectResolver->resolve($remoteActorId, Actor::class)
             ?? throw new RuntimeException('Remote Actor not found for uri ' . $remoteActorId);
         $localObject = $this->localObjectEntityResolver->resolve($localObjectId)
             ?? throw new RuntimeException('Local object not found for uri ' . $localObjectId);

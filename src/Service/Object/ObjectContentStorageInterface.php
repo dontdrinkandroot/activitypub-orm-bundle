@@ -4,11 +4,11 @@ namespace Dontdrinkandroot\ActivityPubOrmBundle\Service\Object;
 
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Core\CoreObject;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredObject;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\CoreObject as DbObject;
 
 interface ObjectContentStorageInterface
 {
-    public function store(Uri|StoredObject $object, CoreObject|string $content): void;
+    public function store(Uri|DbObject $object, CoreObject|string $content): void;
 
     /**
      * @template T of CoreObject

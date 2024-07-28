@@ -5,7 +5,7 @@ namespace Dontdrinkandroot\ActivityPubOrmBundle\Event\Listener;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredObject;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\CoreObject;
 use Dontdrinkandroot\Common\DateUtils;
 use Dontdrinkandroot\Common\ReflectionUtils;
 
@@ -24,7 +24,7 @@ class StoredObjectUpdatedListener
     public function updateTimestamp(LifecycleEventArgs $event): void
     {
         $entity = $event->getObject();
-        if ($entity instanceof StoredObject) {
+        if ($entity instanceof CoreObject) {
             ReflectionUtils::setPropertyValue($entity, 'updated', DateUtils::currentMillis());
         }
     }

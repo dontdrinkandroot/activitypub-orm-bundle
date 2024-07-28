@@ -6,13 +6,13 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Actor;
 use Override;
 use RuntimeException;
 use Stringable;
 
 #[ORM\Entity]
-class LocalActor extends StoredActor implements LocalActorInterface, Stringable
+class LocalActor extends Actor implements LocalActorInterface, Stringable
 {
     public function __construct(
         Uri $uri,

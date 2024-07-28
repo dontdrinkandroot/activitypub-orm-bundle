@@ -4,14 +4,16 @@ namespace Dontdrinkandroot\ActivityPubOrmBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Dontdrinkandroot\ActivityPubCoreBundle\Model\Direction;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
+use Dontdrinkandroot\ActivityPubOrmBundle\Doctrine\Dbal\Type\UriType;
 
 #[ORM\Entity]
-class Interaction extends CoreObject
+#[ORM\Table(name: 'activity')]
+class Activity extends CoreObject
 {
     public function __construct(
         Uri $uri,
+
         string $type,
 
         #[ORM\ManyToOne(targetEntity: Actor::class)]
@@ -22,9 +24,8 @@ class Interaction extends CoreObject
         #[ORM\JoinColumn(nullable: false)]
         public readonly CoreObject $object,
 
-        // TODO: Would love to use boolean but hydration fails
-        #[ORM\Column(name: 'direction', type: Types::SMALLINT, enumType: Direction::class)]
-        public readonly Direction $direction,
+        #[ORM\Column(type: Types::BIGINT, nullable: true)]
+        public ?int $published = null,
     ) {
         parent::__construct($uri, $type);
     }

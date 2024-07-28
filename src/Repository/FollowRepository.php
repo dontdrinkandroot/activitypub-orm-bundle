@@ -7,7 +7,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\Direction;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\FollowState;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Follow;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Actor;
 
 /**
  * @extends CrudServiceEntityRepository<Follow>
@@ -21,7 +21,7 @@ class FollowRepository extends CrudServiceEntityRepository
 
     public function findOneByLocalActorAndRemoteActor(
         LocalActorInterface $localActor,
-        StoredActor $remoteActor,
+        Actor $remoteActor,
         Direction $direction
     ): ?Follow {
         $queryBuilder = $this->createQueryBuilder('follow')

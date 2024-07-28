@@ -6,7 +6,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\SignKey;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Actor\Actor;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Object\ObjectProviderInterface;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Actor as DbActor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredActorRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\DatabaseObjectPersisterInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\ObjectContentStorage;
@@ -35,7 +35,7 @@ class DatabaseActorService implements ObjectProviderInterface, DatabaseObjectPer
         }
         $actor = $object;
 
-        $dbActor = new StoredActor(
+        $dbActor = new DbActor(
             uri: $actor->getId(),
             type: $actor->getType(),
             preferredUsername: $actor->preferredUsername,

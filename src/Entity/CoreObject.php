@@ -11,7 +11,7 @@ use RuntimeException;
 #[ORM\Entity]
 #[ORM\InheritanceType(value: 'JOINED')]
 #[ORM\Table(name: 'object')]
-class StoredObject
+class CoreObject
 {
     use EntityTrait;
 

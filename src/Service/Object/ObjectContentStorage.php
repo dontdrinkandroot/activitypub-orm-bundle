@@ -7,7 +7,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\CoreType;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Serializer\ActivityStreamEncoder;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\ObjectContent;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredObject;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\CoreObject as DbObject;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ObjectContentRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredObjectRepository;
 use Dontdrinkandroot\Common\Asserted;
@@ -25,9 +25,9 @@ class ObjectContentStorage implements ObjectContentStorageInterface
     }
 
     #[Override]
-    public function store(Uri|StoredObject $object, CoreObject|string $content): void
+    public function store(Uri|DbObject $object, CoreObject|string $content): void
     {
-        $uri = $object instanceof StoredObject ? $object->uri : $object;
+        $uri = $object instanceof DbObject ? $object->uri : $object;
 
         $stringContent = is_string($content)
             ? $content
@@ -41,7 +41,7 @@ class ObjectContentStorage implements ObjectContentStorageInterface
             return;
         }
 
-        $resolvedObject = $object instanceof StoredObject
+        $resolvedObject = $object instanceof DbObject
             ? $object
             : $this->storedObjectRepository->findOneByUri($uri)
             ?? throw new RuntimeException('Object not found');

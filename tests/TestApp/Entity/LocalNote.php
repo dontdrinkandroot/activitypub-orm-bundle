@@ -5,11 +5,11 @@ namespace Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredObject;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\CoreObject;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
-class LocalNote extends StoredObject
+class LocalNote extends CoreObject
 {
     public function __construct(
         Uri $uri,

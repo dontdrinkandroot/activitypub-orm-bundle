@@ -3,11 +3,11 @@
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Repository;
 
 use Doctrine\Persistence\ManagerRegistry;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Actor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalActor;
 
 /**
- * @template T of StoredActor
+ * @template T of Actor
  * @extends StoredObjectRepository<T>
  */
 class StoredActorRepository extends StoredObjectRepository
@@ -15,7 +15,7 @@ class StoredActorRepository extends StoredObjectRepository
     /**
      * @param class-string<T> $entityClass
      */
-    public function __construct(ManagerRegistry $registry, string $entityClass = StoredActor::class)
+    public function __construct(ManagerRegistry $registry, string $entityClass = Actor::class)
     {
         parent::__construct($registry, $entityClass);
     }

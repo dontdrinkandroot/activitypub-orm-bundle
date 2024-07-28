@@ -11,8 +11,8 @@ class ObjectContent
 {
     public function __construct(
         #[ORM\Id]
-        #[ORM\OneToOne(targetEntity: StoredObject::class)]
-        public StoredObject $object,
+        #[ORM\OneToOne(targetEntity: CoreObject::class)]
+        public CoreObject $object,
 
         #[ORM\Column(type: PlainJsonType::NAME)]
         public string $content

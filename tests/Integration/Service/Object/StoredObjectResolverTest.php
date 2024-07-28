@@ -6,7 +6,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Actor\Person as A
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Endpoints;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Client\ActivityPubClientInterface;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Actor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\StoredObjectResolverInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\FixtureSetDefault;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\WebTestCase;
@@ -34,7 +34,7 @@ class StoredObjectResolverTest extends WebTestCase
         self::getContainer()->set(ActivityPubClientInterface::class, $clientMock);
 
         $storedObjectResolver = self::getService(StoredObjectResolverInterface::class);
-        $resolvedActor = $storedObjectResolver->resolve($uri, StoredActor::class);
+        $resolvedActor = $storedObjectResolver->resolve($uri, Actor::class);
 
         self::assertNotNull($resolvedActor);
         self::assertTrue($uri->equals($resolvedActor->uri));

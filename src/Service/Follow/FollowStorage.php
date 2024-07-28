@@ -8,7 +8,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\LocalActorInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Follow\FollowStorageInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Follow;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\StoredActor;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Actor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\FollowRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\StoredObjectResolverInterface;
 use Override;
@@ -25,7 +25,7 @@ class FollowStorage implements FollowStorageInterface
     #[Override]
     public function add(LocalActorInterface $localActor, Uri $remoteActorId, Direction $direction): void
     {
-        $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
+        $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, Actor::class)
             ?? throw new RuntimeException('Remote Actor not found');
         $follow = $this->repository->findOneByLocalActorAndRemoteActor($localActor, $remoteActor, $direction);
         if (null !== $follow) {
@@ -39,7 +39,7 @@ class FollowStorage implements FollowStorageInterface
     #[Override]
     public function accept(LocalActorInterface $localActor, Uri $remoteActorId, Direction $direction): void
     {
-        $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
+        $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, Actor::class)
             ?? throw new RuntimeException('Remote Actor not found');
         $follow = $this->repository->findOneByLocalActorAndRemoteActor($localActor, $remoteActor, $direction);
         if (null === $follow) {
@@ -53,7 +53,7 @@ class FollowStorage implements FollowStorageInterface
     #[Override]
     public function reject(LocalActorInterface $localActor, Uri $remoteActorId, Direction $direction): void
     {
-        $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
+        $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, Actor::class)
             ?? throw new RuntimeException('Remote Actor not found');
         $follow = $this->repository->findOneByLocalActorAndRemoteActor($localActor, $remoteActor, $direction);
         if (null === $follow) {
@@ -66,7 +66,7 @@ class FollowStorage implements FollowStorageInterface
     #[Override]
     public function remove(LocalActorInterface $localActor, Uri $remoteActorId, Direction $direction): void
     {
-        $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
+        $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, Actor::class)
             ?? throw new RuntimeException('Remote Actor not found');
         $follow = $this->repository->findOneByLocalActorAndRemoteActor($localActor, $remoteActor, $direction);
         if (null !== $follow) {
@@ -77,7 +77,7 @@ class FollowStorage implements FollowStorageInterface
     #[Override]
     public function findState(LocalActorInterface $localActor, Uri $remoteActorId, Direction $direction): ?FollowState
     {
-        $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, StoredActor::class)
+        $remoteActor = $this->storedObjectResolver->resolve($remoteActorId, Actor::class)
             ?? throw new RuntimeException('Remote Actor not found');
         $follow = $this->repository->findOneByLocalActorAndRemoteActor($localActor, $remoteActor, $direction);
         if (null === $follow) {
