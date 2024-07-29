@@ -12,6 +12,7 @@ class Interaction extends CoreObject
 {
     public function __construct(
         Uri $uri,
+
         string $type,
 
         #[ORM\ManyToOne(targetEntity: Actor::class)]

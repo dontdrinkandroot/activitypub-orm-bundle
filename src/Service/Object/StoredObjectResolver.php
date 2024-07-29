@@ -5,7 +5,7 @@ namespace Dontdrinkandroot\ActivityPubOrmBundle\Service\Object;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Object\ObjectResolverInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\CoreObject as DbObject;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredObjectRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ObjectRepository;
 use Dontdrinkandroot\Common\Asserted;
 use Override;
 use RuntimeException;
@@ -13,7 +13,7 @@ use RuntimeException;
 class StoredObjectResolver implements StoredObjectResolverInterface
 {
     public function __construct(
-        private readonly StoredObjectRepository $storedObjectRepository,
+        private readonly ObjectRepository $storedObjectRepository,
         private readonly ObjectResolverInterface $objectResolver
     ) {
     }

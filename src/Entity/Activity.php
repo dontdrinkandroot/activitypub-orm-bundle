@@ -5,9 +5,9 @@ namespace Dontdrinkandroot\ActivityPubOrmBundle\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
-use Dontdrinkandroot\ActivityPubOrmBundle\Doctrine\Dbal\Type\UriType;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ActivityRepository;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ActivityRepository::class)]
 #[ORM\Table(name: 'activity')]
 class Activity extends CoreObject
 {

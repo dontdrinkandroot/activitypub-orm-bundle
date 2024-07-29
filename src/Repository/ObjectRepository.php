@@ -10,7 +10,7 @@ use Dontdrinkandroot\ActivityPubOrmBundle\Entity\CoreObject;
  * @template T of Object
  * @extends CrudServiceEntityRepository<T>
  */
-class StoredObjectRepository extends CrudServiceEntityRepository
+class ObjectRepository extends CrudServiceEntityRepository
 {
     /**
      * @param class-string<T> $entityClass

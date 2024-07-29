@@ -2,14 +2,14 @@
 
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Service\Object;
 
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\CoreObject;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredObjectRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\CoreObject as DbObject;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ObjectRepository;
 use Override;
 
 class GenericDatabaseObjectPersister implements DatabaseObjectPersisterInterface
 {
     public function __construct(
-        private readonly StoredObjectRepository $storedObjectRepository,
+        private readonly ObjectRepository $storedObjectRepository,
         private readonly ObjectContentStorageInterface $objectContentStorage,
     ) {
     }
@@ -22,7 +22,7 @@ class GenericDatabaseObjectPersister implements DatabaseObjectPersisterInterface
             return true;
         }
 
-        $storedObject = new CoreObject($object->getId(), $object->getType());
+        $storedObject = new DbObject($object->getId(), $object->getType());
         $this->storedObjectRepository->create($storedObject);
 
         $this->objectContentStorage->store($storedObject, $object);

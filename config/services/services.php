@@ -14,11 +14,13 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Service\Object\ObjectResolverInterfac
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Share\InteractionServiceInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Config\Container\TagName;
 use Dontdrinkandroot\ActivityPubOrmBundle\Event\Listener\StoredObjectUpdatedListener;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ActivityRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ActorRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\InboxItemRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ObjectContentRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ObjectRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\PendingDeliveryRepository;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredActorRepository;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredObjectRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Service\Activity\DatabaseActivityService;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Actor\DatabaseActorService;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\DeliveryService;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Follow\FollowStorage;
@@ -67,7 +69,7 @@ return function (ContainerConfigurator $configurator): void {
 
     $services->set(DatabaseActorService::class)
         ->args([
-            service(StoredActorRepository::class),
+            service(ActorRepository::class),
             service(ObjectContentStorageInterface::class),
             service(StoredObjectResolverInterface::class)
         ])
@@ -85,9 +87,17 @@ return function (ContainerConfigurator $configurator): void {
         ])
         ->tag(CoreTagName::DDR_ACTIVITY_PUB_OBJECT_PROVIDER, ['priority' => -128]);
 
+    $services->set(DatabaseActivityService::class)
+        ->args([
+            service(ActivityRepository::class),
+            service(StoredObjectResolverInterface::class),
+            service(ObjectContentStorage::class)
+        ])
+        ->tag(TagName::DATABASE_OBJECT_PERSISTER, ['priority' => -128]);
+
     $services->set(GenericDatabaseObjectPersister::class)
         ->args([
-            service(StoredObjectRepository::class),
+            service(ObjectRepository::class),
             service(ObjectContentStorageInterface::class)
         ])
         ->tag(TagName::DATABASE_OBJECT_PERSISTER, ['priority' => -256]);
@@ -95,14 +105,14 @@ return function (ContainerConfigurator $configurator): void {
     $services->set(ObjectContentStorage::class)
         ->args([
             service(ObjectContentRepository::class),
-            service(StoredObjectRepository::class),
+            service(ObjectRepository::class),
             service(SerializerInterface::class)
         ]);
     $services->alias(ObjectContentStorageInterface::class, ObjectContentStorage::class);
 
     $services->set(StoredObjectResolver::class)
         ->args([
-            service(StoredObjectRepository::class),
+            service(ObjectRepository::class),
             service(ObjectResolverInterface::class)
         ]);
     $services->alias(StoredObjectResolverInterface::class, StoredObjectResolver::class);

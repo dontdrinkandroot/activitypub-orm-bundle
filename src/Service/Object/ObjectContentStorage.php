@@ -6,10 +6,10 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Core\CoreObject;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\CoreType;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Serializer\ActivityStreamEncoder;
-use Dontdrinkandroot\ActivityPubOrmBundle\Entity\ObjectContent;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\CoreObject as DbObject;
+use Dontdrinkandroot\ActivityPubOrmBundle\Entity\ObjectContent;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ObjectContentRepository;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredObjectRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ObjectRepository;
 use Dontdrinkandroot\Common\Asserted;
 use Override;
 use RuntimeException;
@@ -19,7 +19,7 @@ class ObjectContentStorage implements ObjectContentStorageInterface
 {
     public function __construct(
         private readonly ObjectContentRepository $objectContentRepository,
-        private readonly StoredObjectRepository $storedObjectRepository,
+        private readonly ObjectRepository $storedObjectRepository,
         private readonly SerializerInterface $serializer
     ) {
     }

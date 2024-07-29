@@ -3,13 +3,13 @@
 namespace Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Repository;
 
 use Doctrine\Persistence\ManagerRegistry;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredActorRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ActorRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalActor;
 
 /**
- * @extends StoredActorRepository<LocalActor>
+ * @extends ActorRepository<LocalActor>
  */
-class LocalActorRepository extends StoredActorRepository
+class LocalActorRepository extends ActorRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

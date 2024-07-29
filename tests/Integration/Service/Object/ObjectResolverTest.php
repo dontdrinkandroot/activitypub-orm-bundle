@@ -11,8 +11,8 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Service\Client\ActivityPubClientInter
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Object\ObjectResolverInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Actor as DbActor;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\CoreObject;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredActorRepository;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredObjectRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ActorRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ObjectRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\FixtureSetDefault;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalObject\PersonNote1;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\WebTestCase;
@@ -79,7 +79,7 @@ class ObjectResolverTest extends WebTestCase
         self::assertNotNull($resolvedNote);
         self::assertTrue($uri->equals($resolvedNote->getId()));
 
-        $storedObjectRepository = self::getService(StoredObjectRepository::class);
+        $storedObjectRepository = self::getService(ObjectRepository::class);
         $storedObject = $storedObjectRepository->findOneByUri($uri);
         self::assertNotNull($storedObject);
         self::assertInstanceOf(CoreObject::class, $storedObject);
@@ -107,7 +107,7 @@ class ObjectResolverTest extends WebTestCase
         self::assertNotNull($resolvedActor);
         self::assertTrue($uri->equals($resolvedActor->getId()));
 
-        $actorRepository = self::getService(StoredActorRepository::class);
+        $actorRepository = self::getService(ActorRepository::class);
         $storedActor = $actorRepository->findOneByUri($uri);
         self::assertNotNull($storedActor);
         self::assertInstanceOf(DbActor::class, $storedActor);

@@ -5,16 +5,14 @@ namespace Dontdrinkandroot\ActivityPubOrmBundle\Tests\Acceptance\Controller\Inbo
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Actor\LocalActorServiceInterface;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Client\ActivityPubClientInterface;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ActivityRepository;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\InboxItemRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Repository\InteractionRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\FixtureSetDefault;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\DataFixtures\LocalObject\PersonNote1;
 use Dontdrinkandroot\ActivityPubOrmBundle\Tests\WebTestCase;
 
-class AnnounceTest extends WebTestCase
+class CreateTest extends WebTestCase
 {
-    public function testIncomingAnnounce(): void
+    public function testCreateNote(): void
     {
         self::bootKernel();
         $referenceRepository = self::loadFixtures([FixtureSetDefault::class]);
@@ -30,9 +28,12 @@ class AnnounceTest extends WebTestCase
             uri: Uri::fromString('http://localhost/@person/inbox'),
             content: json_encode([
                 '@context' => 'https://www.w3.org/ns/activitystreams',
-                'id' => 'https://localhost/interactions/12345',
-                'type' => 'Announce',
+                'id' => 'https://localhost/activities/3948574385',
+                'type' => 'Create',
                 'actor' => 'https://localhost/@service',
+                'published' => '2021-02-03T04:05:06Z',
+                'to' => ['https://www.w3.org/ns/activitystreams#Public'],
+                'cc' => ['https://localhost/@service/followers'],
                 'object' => PersonNote1::URI,
             ], JSON_THROW_ON_ERROR),
             signKey: $signKey
@@ -43,13 +44,5 @@ class AnnounceTest extends WebTestCase
         self::assertCount(1, $shares);
         $share = $shares[0];
         self::assertEquals('https://localhost/@service', $share->actor->uri);
-
-        $inboxItemRepository = self::getService(InboxItemRepository::class);
-        $inboxItems = $inboxItemRepository->findAll();
-        self::assertCount(1, $inboxItems);
-
-        $activityRepository = self::getService(ActivityRepository::class);
-        $activities = $activityRepository->findAll();
-        self::assertCount(1, $activities);
     }
 }

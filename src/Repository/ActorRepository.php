@@ -8,9 +8,9 @@ use Dontdrinkandroot\ActivityPubOrmBundle\Tests\TestApp\Entity\LocalActor;
 
 /**
  * @template T of Actor
- * @extends StoredObjectRepository<T>
+ * @extends ObjectRepository<T>
  */
-class StoredActorRepository extends StoredObjectRepository
+class ActorRepository extends ObjectRepository
 {
     /**
      * @param class-string<T> $entityClass

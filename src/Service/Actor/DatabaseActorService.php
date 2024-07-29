@@ -7,7 +7,7 @@ use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Extended\Actor\Actor;
 use Dontdrinkandroot\ActivityPubCoreBundle\Model\Type\Property\Uri;
 use Dontdrinkandroot\ActivityPubCoreBundle\Service\Object\ObjectProviderInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Entity\Actor as DbActor;
-use Dontdrinkandroot\ActivityPubOrmBundle\Repository\StoredActorRepository;
+use Dontdrinkandroot\ActivityPubOrmBundle\Repository\ActorRepository;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\DatabaseObjectPersisterInterface;
 use Dontdrinkandroot\ActivityPubOrmBundle\Service\Object\ObjectContentStorage;
 use Dontdrinkandroot\Common\Asserted;
@@ -16,7 +16,7 @@ use Override;
 class DatabaseActorService implements ObjectProviderInterface, DatabaseObjectPersisterInterface
 {
     public function __construct(
-        private readonly StoredActorRepository $actorRepository,
+        private readonly ActorRepository $actorRepository,
         private readonly ObjectContentStorage $objectContentStorage,
     ) {
     }
